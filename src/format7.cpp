@@ -75,9 +75,9 @@ bool Format7::start(dc1394camera_t *camera,
   // supported at all in Format7 modes.
   if (newconfig.bayer_method != "")
   {
-    ROS_WARN_STREAM("Bayer method [" << newconfig.bayer_method
-                                     << "] not supported for Format7 modes."
-                                     << "  Using image_proc instead.");
+    RCLCPP_WARN_STREAM(private_nh_->get_logger(), "Bayer method [" << newconfig.bayer_method
+                                                                   << "] not supported for Format7 modes."
+                                                                   << "  Using image_proc instead.");
     newconfig.bayer_method = "";
   }
 
@@ -89,8 +89,8 @@ bool Format7::start(dc1394camera_t *camera,
   }
   else
   {
-    ROS_WARN_STREAM("Bayer pattern [" << newconfig.bayer_pattern << " ("
-                                      << bayer_pattern << ")] is invalid.");
+    RCLCPP_WARN_STREAM(private_nh_->get_logger(), "Bayer pattern [" << newconfig.bayer_pattern << " ("
+                                                                    << bayer_pattern << ")] is invalid.");
   }
 
   // scan all Format7 modes to determine the full-sensor image size,
@@ -120,7 +120,7 @@ bool Format7::start(dc1394camera_t *camera,
                                                           &maxWidth_,
                                                           &maxHeight_))
   {
-    ROS_ERROR("Could not get max image size");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not get max image size");
     return false;
   }
 
@@ -149,7 +149,7 @@ bool Format7::start(dc1394camera_t *camera,
   if (DC1394_SUCCESS != dc1394_format7_get_unit_size(camera, mode,
                                                      &unit_w, &unit_h))
   {
-    ROS_ERROR("Could not get ROI size units");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not get ROI size units");
     return false;
   }
 
@@ -159,7 +159,7 @@ bool Format7::start(dc1394camera_t *camera,
   if (DC1394_SUCCESS != dc1394_format7_get_unit_position(camera, mode,
                                                          &unit_x, &unit_y))
   {
-    ROS_ERROR("Could not get ROI position units");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not get ROI position units");
     return false;
   }
 
@@ -172,16 +172,16 @@ bool Format7::start(dc1394camera_t *camera,
   unit_x *= binning_x_;
   unit_y *= binning_y_;
 
-  ROS_INFO_STREAM("Format7 unit size: ("
-                  << unit_w << "x" << unit_h
-                  << "), position: ("
-                  << unit_x << "x" << unit_y
-                  << ")");
-  ROS_INFO_STREAM("Format7 region size: ("
-                  << roi_.width << "x" << roi_.height
-                  << "), offset: ("
-                  << roi_.x_offset << ", " << roi_.y_offset
-                  << ")");
+  RCLCPP_INFO_STREAM(private_nh_->get_logger(), "Format7 unit size: ("
+                                                    << unit_w << "x" << unit_h
+                                                    << "), position: ("
+                                                    << unit_x << "x" << unit_y
+                                                    << ")");
+  RCLCPP_INFO_STREAM(private_nh_->get_logger(), "Format7 region size: ("
+                                                    << roi_.width << "x" << roi_.height
+                                                    << "), offset: ("
+                                                    << roi_.x_offset << ", " << roi_.y_offset
+                                                    << ")");
 
   /* Reset ROI position to (0,0). If it was previously (x,y) and
    * the requested ROI size (w,h) results in (x,y) + (w,h) >
@@ -192,9 +192,9 @@ bool Format7::start(dc1394camera_t *camera,
   if ((roi_.width % unit_w) || (roi_.height % unit_h))
   {
     /// @todo Add some sensible recovery for bad Format7 size.
-    ROS_ERROR("Requested image size invalid; (w,h) must be"
-              " a multiple of (%d, %d)",
-              unit_w, unit_h);
+    RCLCPP_ERROR(private_nh_->get_logger(), "Requested image size invalid; (w,h) must be"
+                                            " a multiple of (%d, %d)",
+                 unit_w, unit_h);
     return false;
   }
 
@@ -208,15 +208,15 @@ bool Format7::start(dc1394camera_t *camera,
                                                       binned_width,
                                                       binned_height))
   {
-    ROS_ERROR("Could not set size of ROI");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not set size of ROI");
     return false;
   }
 
   if ((roi_.x_offset % unit_x) || (roi_.y_offset % unit_y))
   {
-    ROS_ERROR("Requested image position invalid; (x,y) must"
-              " be a multiple of (%d, %d)",
-              unit_x, unit_y);
+    RCLCPP_ERROR(private_nh_->get_logger(), "Requested image position invalid; (x,y) must"
+                                            " be a multiple of (%d, %d)",
+                 unit_x, unit_y);
     return false;
   }
 
@@ -224,7 +224,7 @@ bool Format7::start(dc1394camera_t *camera,
                                                           binned_x_offset,
                                                           binned_y_offset))
   {
-    ROS_ERROR("Could not set position of ROI");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not set position of ROI");
     return false;
   }
 
@@ -236,7 +236,7 @@ bool Format7::start(dc1394camera_t *camera,
   if (DC1394_SUCCESS != dc1394_format7_set_color_coding(camera, mode,
                                                         coding_))
   {
-    ROS_ERROR("Could not set color coding");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not set color coding");
     return false;
   }
 
@@ -245,7 +245,7 @@ bool Format7::start(dc1394camera_t *camera,
   if (DC1394_SUCCESS != dc1394_format7_get_recommended_packet_size(camera, mode,
                                                                    &rec_packet_size))
   {
-    ROS_ERROR("Could not get default packet size");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not get default packet size");
     return false;
   }
 
@@ -257,22 +257,22 @@ bool Format7::start(dc1394camera_t *camera,
   if (DC1394_SUCCESS != dc1394_format7_get_packet_parameters(camera, mode,
                                                              &unit_bytes, &max_bytes))
   {
-    ROS_ERROR("Could not determine maximum and increment for packet size");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not determine maximum and increment for packet size");
     return false;
   }
 
   if (packet_size % unit_bytes || (max_bytes > 0 && packet_size > max_bytes))
   {
-    ROS_ERROR("Invalid packet size: %d. Must be a "
-              "multiple of %d, at most %d [%d]",
-              packet_size, unit_bytes, max_bytes, rec_packet_size);
+    RCLCPP_ERROR(private_nh_->get_logger(), "Invalid packet size: %d. Must be a "
+                                            "multiple of %d, at most %d [%d]",
+                 packet_size, unit_bytes, max_bytes, rec_packet_size);
     return false;
   }
 
   if (DC1394_SUCCESS != dc1394_format7_set_packet_size(camera, mode,
                                                        packet_size))
   {
-    ROS_ERROR("Could not set packet size");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not set packet size");
     return false;
   }
 
@@ -283,7 +283,7 @@ bool Format7::start(dc1394camera_t *camera,
     if (DC1394_SUCCESS != dc1394_format7_get_color_filter(camera, mode,
                                                           &color_filter))
     {
-      ROS_ERROR("Could not determine color pattern");
+      RCLCPP_ERROR(private_nh_->get_logger(), "Could not determine color pattern");
       return false;
     }
     if (BayerPattern_ == (dc1394color_filter_t)DC1394_COLOR_FILTER_NUM)
@@ -292,9 +292,9 @@ bool Format7::start(dc1394camera_t *camera,
     }
     else if (BayerPattern_ != color_filter)
     {
-      ROS_WARN_STREAM("Bayer Pattern was set to "
-                      << BayerPattern_ << "but get_color_filter returned "
-                      << color_filter << ". Using " << BayerPattern_);
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "Bayer Pattern was set to "
+                                                        << BayerPattern_ << "but get_color_filter returned "
+                                                        << color_filter << ". Using " << BayerPattern_);
     }
   }
 
@@ -408,8 +408,8 @@ void Format7::unpackData(sensor_msgs::Image &image, uint8_t *capture_buffer)
     memcpy(&image.data[0], capture_buffer, image_size);
     break;
   default:
-    ROS_ERROR_STREAM("Driver bug: unknown Format7 color coding:"
-                     << coding_);
+    RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "Driver bug: unknown Format7 color coding:"
+                                                       << coding_);
     ROS_BREAK();
   }
 }
@@ -438,12 +438,13 @@ bool Format7::checkCameraInfo(const sensor_msgs::CameraInfo &cinfo)
   }
   else
   {
-    ROS_WARN_STREAM_THROTTLE(30, "Calibrated image size ("
-                                     << cinfo.width << "x" << cinfo.height
-                                     << ") matches neither full Format7 size ("
-                                     << maxWidth_ << "x" << maxHeight_ << ")"
-                                     << ") nor ROI size ("
-                                     << roi_.width << "x" << roi_.height << ")");
+    rclcpp::Logger logger = private_nh_->get_logger();
+    int duration = 30;
+    rclcpp::Clock clock = *private_nh_->get_clock().get();
+    RCLCPP_WARN_STREAM_THROTTLE(logger,
+                                clock,
+                                30, "Calibrated image size (" << cinfo.width << "x" << cinfo.height << ") matches neither full Format7 size (" << maxWidth_ << "x" << maxHeight_ << ")"
+                                                              << ") nor ROI size (" << roi_.width << "x" << roi_.height << ")");
     return false;
   }
 }
@@ -525,7 +526,7 @@ dc1394color_filter_t Format7::findBayerPattern(const char *bayer)
   }
   else if (0 != strcmp(bayer, ""))
   {
-    ROS_ERROR("unknown bayer pattern [%s]", bayer);
+    RCLCPP_ERROR(private_nh_->get_logger(), "unknown bayer pattern [%s]", bayer);
   }
   return pattern;
 }

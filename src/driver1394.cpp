@@ -107,7 +107,7 @@ namespace camera1394_driver
     {
         if (state_ != Driver::CLOSED)
         {
-            ROS_INFO_STREAM("[" << camera_name_ << "] closing device");
+            RCLCPP_INFO_STREAM(private_nh_->get_logger(), "[" << camera_name_ << "] closing device");
             dev_->close();
             state_ = Driver::CLOSED;
         }
@@ -140,15 +140,15 @@ namespace camera1394_driver
                     {
                         // GUID is 16 hex digits, which should be valid.
                         // If not, use it for log messages anyway.
-                        ROS_WARN_STREAM("[" << camera_name_
-                                            << "] name not valid"
-                                            << " for camera_info_manger");
+                        RCLCPP_WARN_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                                          << "] name not valid"
+                                                                          << " for camera_info_manger");
                     }
                 }
-                ROS_INFO_STREAM("[" << camera_name_ << "] opened: "
-                                    << newconfig.video_mode << ", "
-                                    << newconfig.frame_rate << " fps, "
-                                    << newconfig.iso_speed << " Mb/s");
+                RCLCPP_INFO_STREAM(private_nh_->get_logger(), "[" << camera_name_ << "] opened: "
+                                                                  << newconfig.video_mode << ", "
+                                                                  << newconfig.frame_rate << " fps, "
+                                                                  << newconfig.iso_speed << " Mb/s");
                 state_ = Driver::OPENED;
                 calibration_matches_ = true;
                 newconfig.guid = camera_name_; // update configuration parameter
@@ -160,12 +160,12 @@ namespace camera1394_driver
         {
             state_ = Driver::CLOSED; // since the open() failed
             if (retries_++ > 0)
-                ROS_DEBUG_STREAM("[" << camera_name_
-                                     << "] exception opening device (retrying): "
-                                     << e.what());
+                RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                                   << "] exception opening device (retrying): "
+                                                                   << e.what());
             else
-                ROS_ERROR_STREAM("[" << camera_name_
-                                     << "] device open failed: " << e.what());
+                RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                                   << "] device open failed: " << e.what());
         }
 
         // update diagnostics parameters
@@ -208,8 +208,8 @@ namespace camera1394_driver
                 }
                 else if (++consecutive_read_errors_ > config_.max_consecutive_errors && config_.max_consecutive_errors > 0)
                 {
-                    ROS_WARN("reached %u consecutive read errrors, disconnecting",
-                             consecutive_read_errors_);
+                    RCLCPP_WARN(private_nh_->get_logger(), "reached %u consecutive read errrors, disconnecting",
+                                consecutive_read_errors_);
                     closeCamera();
                 }
             }
@@ -247,9 +247,9 @@ namespace camera1394_driver
             {
                 // warn user once
                 calibration_matches_ = false;
-                ROS_WARN_STREAM("[" << camera_name_
-                                    << "] calibration does not match video mode "
-                                    << "(publishing uncalibrated data)");
+                RCLCPP_WARN_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                                  << "] calibration does not match video mode "
+                                                                  << "(publishing uncalibrated data)");
             }
             ci.reset(new sensor_msgs::CameraInfo());
             ci->height = image->height;
@@ -259,8 +259,8 @@ namespace camera1394_driver
         {
             // calibration OK now
             calibration_matches_ = true;
-            ROS_WARN_STREAM("[" << camera_name_
-                                << "] calibration matches video mode now");
+            RCLCPP_WARN_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                              << "] calibration matches video mode now");
         }
 
         // fill in operational parameters
@@ -289,14 +289,14 @@ namespace camera1394_driver
         try
         {
             // Read data from the Camera
-            ROS_DEBUG_STREAM("[" << camera_name_ << "] reading data");
+            RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "[" << camera_name_ << "] reading data");
             success = dev_->readData(*image);
-            ROS_DEBUG_STREAM("[" << camera_name_ << "] read returned");
+            RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "[" << camera_name_ << "] read returned");
         }
         catch (camera1394::Exception &e)
         {
-            ROS_WARN_STREAM("[" << camera_name_
-                                << "] Exception reading data: " << e.what());
+            RCLCPP_WARN_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                              << "] Exception reading data: " << e.what());
             success = false;
         }
         return success;
@@ -317,13 +317,13 @@ namespace camera1394_driver
         // and wait on the lock until it does.
         reconfiguring_ = true;
         boost::mutex::scoped_lock lock(mutex_);
-        ROS_DEBUG("dynamic reconfigure level 0x%x", level);
+        RCLCPP_DEBUG(private_nh_->get_logger(), "dynamic reconfigure level 0x%x", level);
 
         // resolve frame ID using tf_prefix parameter
         if (newconfig.frame_id == "")
             newconfig.frame_id = "camera";
         std::string tf_prefix = tf::getPrefixParam(priv_nh_);
-        ROS_DEBUG_STREAM("tf_prefix: " << tf_prefix);
+        RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "tf_prefix: " << tf_prefix);
         newconfig.frame_id = tf::resolve(tf_prefix, newconfig.frame_id);
 
         if (state_ != Driver::CLOSED && (level & Levels::RECONFIGURE_CLOSE))
@@ -360,8 +360,8 @@ namespace camera1394_driver
                 // initialize all features for newly opened device
                 if (false == dev_->features_->initialize(&newconfig))
                 {
-                    ROS_ERROR_STREAM("[" << camera_name_
-                                         << "] feature initialization failure");
+                    RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                                       << "] feature initialization failure");
                     closeCamera(); // can't continue
                 }
             }
@@ -377,9 +377,9 @@ namespace camera1394_driver
         config_ = newconfig;    // save new parameters
         reconfiguring_ = false; // let poll() run again
 
-        ROS_DEBUG_STREAM("[" << camera_name_
-                             << "] reconfigured: frame_id " << newconfig.frame_id
-                             << ", camera_info_url " << newconfig.camera_info_url);
+        RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "[" << camera_name_
+                                                           << "] reconfigured: frame_id " << newconfig.frame_id
+                                                           << ", camera_info_url " << newconfig.camera_info_url);
     }
 
     /** driver initialization
@@ -451,8 +451,8 @@ namespace camera1394_driver
 
         if (!success)
         {
-            ROS_WARN("[%s] getting register failed: type %u, offset %lu",
-                     camera_name_.c_str(), request.type, request.offset);
+            RCLCPP_WARN(private_nh_->get_logger(), "[%s] getting register failed: type %u, offset %lu",
+                        camera_name_.c_str(), request.type, request.offset);
         }
         return success;
     }
@@ -503,8 +503,8 @@ namespace camera1394_driver
 
         if (!success)
         {
-            ROS_WARN("[%s] setting register failed: type %u, offset %lu",
-                     camera_name_.c_str(), request.type, request.offset);
+            RCLCPP_WARN(private_nh_->get_logger(), "[%s] setting register failed: type %u, offset %lu",
+                        camera_name_.c_str(), request.type, request.offset);
         }
         return success;
     }

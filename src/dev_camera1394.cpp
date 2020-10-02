@@ -110,7 +110,7 @@ void Camera1394::findBayerPattern(const char *bayer)
   }
   else if (0 != strcmp(bayer, ""))
   {
-    ROS_ERROR("unknown bayer pattern [%s]", bayer);
+    RCLCPP_ERROR(private_nh_->get_logger(), "unknown bayer pattern [%s]", bayer);
   }
 }
 
@@ -122,9 +122,9 @@ bool Camera1394::findBayerMethod(const char *method)
   {
     DoBayer = true; // decoding in driver
     // add method name to message:
-    ROS_WARN("[%s] Bayer decoding in the driver is DEPRECATED;"
-             " image_proc decoding preferred.",
-             method);
+    RCLCPP_WARN(private_nh_->get_logger(), "[%s] Bayer decoding in the driver is DEPRECATED;"
+                                           " image_proc decoding preferred.",
+                method);
 
     // Set decoding method
     if (!strcmp(method, "DownSample"))
@@ -141,8 +141,8 @@ bool Camera1394::findBayerMethod(const char *method)
       BayerMethod_ = DC1394_BAYER_METHOD_AHD;
     else
     {
-      ROS_ERROR("Unknown Bayer method [%s]. Using ROS image_proc instead.",
-                method);
+      RCLCPP_ERROR(private_nh_->get_logger(), "Unknown Bayer method [%s]. Using ROS image_proc instead.",
+                   method);
       DoBayer = false;
     }
   }
@@ -176,9 +176,12 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
     }
     else
     {
-      ROS_ERROR_STREAM_THROTTLE(3, "Invalid GUID [" << newconfig.guid
+      RCLCPP_ERROR_STREAM_THROTTLE(private_nh_->get_logger(),
+                                   *private_nh_->get_clock().get(),
+                                   3,
+                                   "Invalid GUID [" << newconfig.guid
                                                     << "] specified: " << guid_length
-                                                    << " characters long.");
+                                                    << "characters long.");
     }
   }
 
@@ -228,16 +231,16 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
     if (guid[0] == '\0')
     {
       // pad GUID with leading zeros in message
-      ROS_INFO_STREAM("No GUID specified, using first camera found, GUID: "
-                      << std::setw(16) << std::setfill('0') << std::hex
-                      << list->ids[i].guid);
+      RCLCPP_INFO_STREAM(private_nh_->get_logger(), "No GUID specified, using first camera found, GUID: "
+                                                        << std::setw(16) << std::setfill('0') << std::hex
+                                                        << list->ids[i].guid);
     }
     else
     {
-      ROS_WARN("Comparing %s to %s", guid, temp);
+      RCLCPP_WARN(private_nh_->get_logger(), "Comparing %s to %s", guid, temp);
       if (strcmp(temp, guid))
       {
-        ROS_WARN("GUIDs do not match");
+        RCLCPP_WARN(private_nh_->get_logger(), "GUIDs do not match");
         continue;
       }
     }
@@ -246,18 +249,18 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
     camera_ = dc1394_camera_new(d, list->ids[i].guid);
     if (!camera_)
     {
-      ROS_WARN_STREAM("Failed to initialize camera with GUID "
-                      << std::setw(16) << std::setfill('0') << std::hex
-                      << list->ids[i].guid);
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "Failed to initialize camera with GUID "
+                                                        << std::setw(16) << std::setfill('0') << std::hex
+                                                        << list->ids[i].guid);
 
       SafeCleanup();
       break;
     }
     else
     {
-      ROS_INFO_STREAM("Found camera with GUID "
-                      << std::setw(16) << std::setfill('0') << std::hex
-                      << list->ids[i].guid);
+      RCLCPP_INFO_STREAM(private_nh_->get_logger(), "Found camera with GUID "
+                                                        << std::setw(16) << std::setfill('0') << std::hex
+                                                        << list->ids[i].guid);
 
       device_id_ = std::string(temp);
       break;
@@ -280,8 +283,8 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
     return -1;
   }
 
-  ROS_INFO_STREAM("camera model: " << camera_->vendor
-                                   << " " << camera_->model);
+  RCLCPP_INFO_STREAM(private_nh_->get_logger(), "camera model: " << camera_->vendor
+                                                                 << " " << camera_->model);
 
   //////////////////////////////////////////////////////////////
   // initialize camera
@@ -291,7 +294,7 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
   if (newconfig.reset_on_open && DC1394_SUCCESS != dc1394_camera_reset(camera_))
   {
     // reset failed: log a warning, but continue
-    ROS_WARN("Unable to reset camera (continuing).");
+    RCLCPP_WARN(private_nh_->get_logger(), "Unable to reset camera (continuing).");
   }
 
   // first, set parameters that are common between Format7 and other modes
@@ -398,7 +401,7 @@ int Camera1394::close()
   if (camera_)
   {
     if (DC1394_SUCCESS != dc1394_video_set_transmission(camera_, DC1394_OFF) || DC1394_SUCCESS != dc1394_capture_stop(camera_))
-      ROS_WARN("unable to stop camera");
+      RCLCPP_WARN(private_nh_->get_logger(), "unable to stop camera");
   }
 
   // Free resources
@@ -454,14 +457,14 @@ bool Camera1394::readData(sensor_msgs::Image &image)
   dc1394video_frame_t *frame = NULL;
   if (features_->isTriggerPowered())
   {
-    ROS_DEBUG("[%016lx] polling camera", camera_->guid);
+    RCLCPP_DEBUG(private_nh_->get_logger(), "[%016lx] polling camera", camera_->guid);
     dc1394_capture_dequeue(camera_, DC1394_CAPTURE_POLICY_POLL, &frame);
     if (!frame)
       return false;
   }
   else
   {
-    ROS_DEBUG("[%016lx] waiting camera", camera_->guid);
+    RCLCPP_DEBUG(private_nh_->get_logger(), "[%016lx] waiting camera", camera_->guid);
     dc1394_capture_dequeue(camera_, DC1394_CAPTURE_POLICY_WAIT, &frame);
     if (!frame)
     {
@@ -509,7 +512,7 @@ bool Camera1394::readData(sensor_msgs::Image &image)
     capture_buffer = reinterpret_cast<uint8_t *>(frame->image);
   }
 
-  ROS_ASSERT(capture_buffer);
+  assert(capture_buffer);
 
   int image_size;
   switch (videoMode_)

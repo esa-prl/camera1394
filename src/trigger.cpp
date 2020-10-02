@@ -146,7 +146,7 @@ bool Trigger::enumSources(dc1394camera_t *camera, dc1394trigger_sources_t &sourc
   dc1394error_t err = dc1394_external_trigger_get_supported_sources(camera, &sources);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("enumTriggerSources() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "enumTriggerSources() failed: %d", err);
     return false; // failure
   }
 
@@ -162,7 +162,7 @@ bool Trigger::enumSources(dc1394camera_t *camera, dc1394trigger_sources_t &sourc
     ss << "none";
   }
 
-  ROS_DEBUG_STREAM("Trigger sources: " << ss.str());
+  RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "Trigger sources: " << ss.str());
   return true;
 }
 
@@ -180,7 +180,7 @@ dc1394trigger_polarity_t Trigger::getPolarity(dc1394camera_t *camera)
   dc1394error_t err = dc1394_external_trigger_has_polarity(camera, &has_polarity);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("getPolarity() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "getPolarity() failed: %d", err);
     return (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM; // failure
   }
 
@@ -189,13 +189,13 @@ dc1394trigger_polarity_t Trigger::getPolarity(dc1394camera_t *camera)
     err = dc1394_external_trigger_get_polarity(camera, &current_polarity);
     if (err != DC1394_SUCCESS)
     {
-      ROS_FATAL("getPolarity() failed: %d", err);
+      RCLCPP_FATAL(private_nh_->get_logger(), "getPolarity() failed: %d", err);
       return (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM; // failure
     }
   }
   else
   {
-    ROS_ERROR("Polarity is not supported");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Polarity is not supported");
     return (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM; // failure
   }
 
@@ -217,7 +217,7 @@ bool Trigger::setPolarity(dc1394camera_t *camera, dc1394trigger_polarity_t &pola
   dc1394error_t err = dc1394_external_trigger_has_polarity(camera, &has_polarity);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("setPolarity() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "setPolarity() failed: %d", err);
     return false; // failure
   }
 
@@ -231,14 +231,14 @@ bool Trigger::setPolarity(dc1394camera_t *camera, dc1394trigger_polarity_t &pola
     if (err != DC1394_SUCCESS)
     {
       polarity = current_polarity;
-      ROS_FATAL("setPolarity() failed: %d", err);
+      RCLCPP_FATAL(private_nh_->get_logger(), "setPolarity() failed: %d", err);
       return false; // failure
     }
-    ROS_DEBUG("setPolarity(): %s", triggerPolarityName(polarity).c_str());
+    RCLCPP_DEBUG(private_nh_->get_logger(), "setPolarity(): %s", triggerPolarityName(polarity).c_str());
   }
   else
   {
-    ROS_FATAL("Polarity is not supported");
+    RCLCPP_FATAL(private_nh_->get_logger(), "Polarity is not supported");
     return false; // failure
   }
 
@@ -257,7 +257,7 @@ dc1394switch_t Trigger::getExternalTriggerPowerState(dc1394camera_t *camera)
   dc1394error_t err = dc1394_external_trigger_get_power(camera, &state);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("getExternalTriggerPowerState() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "getExternalTriggerPowerState() failed: %d", err);
     return (dc1394switch_t)-1; // failure
   }
   externalTriggerPowerState_ = state;
@@ -283,11 +283,11 @@ bool Trigger::setExternalTriggerPowerState(dc1394camera_t *camera, dc1394switch_
   if (err != DC1394_SUCCESS)
   {
     state = current_state;
-    ROS_FATAL("setExternalTriggerPowerState() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "setExternalTriggerPowerState() failed: %d", err);
     return false; // failure
   }
   externalTriggerPowerState_ = state;
-  ROS_DEBUG("setExternalTriggerPowerState(): %s", (state == DC1394_ON ? "ON" : "OFF"));
+  RCLCPP_DEBUG(private_nh_->get_logger(), "setExternalTriggerPowerState(): %s", (state == DC1394_ON ? "ON" : "OFF"));
   return true; // success
 }
 
@@ -303,7 +303,7 @@ dc1394switch_t Trigger::getSoftwareTriggerPowerState(dc1394camera_t *camera)
   dc1394error_t err = dc1394_software_trigger_get_power(camera, &state);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("getSoftwareTriggerPowerState() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "getSoftwareTriggerPowerState() failed: %d", err);
     return (dc1394switch_t)-1; // failure
   }
   return state;
@@ -328,10 +328,10 @@ bool Trigger::setSoftwareTriggerPowerState(dc1394camera_t *camera, dc1394switch_
   if (err != DC1394_SUCCESS)
   {
     state = current_state;
-    ROS_FATAL("setSoftwareTriggerPowerState() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "setSoftwareTriggerPowerState() failed: %d", err);
     return false; // failure
   }
-  ROS_DEBUG("setSoftwareTriggerPowerState(): %s", (state == DC1394_ON ? "ON" : "OFF"));
+  RCLCPP_DEBUG(private_nh_->get_logger(), "setSoftwareTriggerPowerState(): %s", (state == DC1394_ON ? "ON" : "OFF"));
   return true; // success
 }
 
@@ -348,7 +348,7 @@ dc1394trigger_mode_t Trigger::getMode(dc1394camera_t *camera)
   dc1394error_t err = dc1394_external_trigger_get_mode(camera, &mode);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("getTriggerMode() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "getTriggerMode() failed: %d", err);
     return (dc1394trigger_mode_t)DC1394_TRIGGER_MODE_NUM; // failure
   }
 
@@ -374,10 +374,10 @@ bool Trigger::setMode(dc1394camera_t *camera, dc1394trigger_mode_t &mode)
   if (err != DC1394_SUCCESS)
   {
     mode = current_mode;
-    ROS_FATAL("setTriggerMode() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "setTriggerMode() failed: %d", err);
     return false; // failure
   }
-  ROS_DEBUG("setMode(): %s", triggerModeName(mode).c_str());
+  RCLCPP_DEBUG(private_nh_->get_logger(), "setMode(): %s", triggerModeName(mode).c_str());
   return true; // success
 }
 
@@ -394,7 +394,7 @@ dc1394trigger_source_t Trigger::getSource(dc1394camera_t *camera)
   dc1394error_t err = dc1394_external_trigger_get_source(camera, &source);
   if (err != DC1394_SUCCESS)
   {
-    ROS_FATAL("getTriggerSource() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "getTriggerSource() failed: %d", err);
     return (dc1394trigger_source_t)DC1394_TRIGGER_SOURCE_NUM; // failure
   }
 
@@ -421,10 +421,10 @@ bool Trigger::setSource(dc1394camera_t *camera, dc1394trigger_source_t &source)
   if (err != DC1394_SUCCESS)
   {
     source = current_source;
-    ROS_FATAL("setTriggerSource() failed: %d", err);
+    RCLCPP_FATAL(private_nh_->get_logger(), "setTriggerSource() failed: %d", err);
     return false; // failure
   }
-  ROS_DEBUG("setSource(): %s", triggerSourceName(source).c_str());
+  RCLCPP_DEBUG(private_nh_->get_logger(), "setSource(): %s", triggerSourceName(source).c_str());
 
   return true; // success
 }
@@ -446,7 +446,7 @@ bool Trigger::reconfigure(Config *newconfig)
   if (!Trigger::setExternalTriggerPowerState(camera_, on_off))
   {
     newconfig->external_trigger = on_off;
-    ROS_ERROR("Failed to set external trigger power");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Failed to set external trigger power");
     is_ok = false;
   }
 
@@ -454,7 +454,7 @@ bool Trigger::reconfigure(Config *newconfig)
   if (!Trigger::setSoftwareTriggerPowerState(camera_, on_off))
   {
     newconfig->software_trigger = on_off;
-    ROS_ERROR("Failed to set software trigger power");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Failed to set software trigger power");
     is_ok = false;
   }
 
@@ -463,15 +463,15 @@ bool Trigger::reconfigure(Config *newconfig)
     if (!Trigger::setMode(camera_, triggerMode_))
     {
       // Possible if driver compiled against different version of libdc1394
-      ROS_ASSERT(triggerMode_ <= DC1394_TRIGGER_MODE_MAX);
+      assert(triggerMode_ <= DC1394_TRIGGER_MODE_MAX);
       newconfig->trigger_mode = Trigger::trigger_mode_names_[triggerMode_ - DC1394_TRIGGER_MODE_MIN];
-      ROS_ERROR("Failed to set trigger mode");
+      RCLCPP_ERROR(private_nh_->get_logger(), "Failed to set trigger mode");
       is_ok = false;
     }
   }
   else
   {
-    ROS_ERROR_STREAM("Unknown trigger mode: " << newconfig->trigger_mode);
+    RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "Unknown trigger mode: " << newconfig->trigger_mode);
     is_ok = false;
   }
 
@@ -482,21 +482,21 @@ bool Trigger::reconfigure(Config *newconfig)
       if (!Trigger::setSource(camera_, triggerSource_))
       {
         // Possible if driver compiled against different version of libdc1394
-        ROS_ASSERT(triggerSource_ <= DC1394_TRIGGER_SOURCE_MAX);
+        assert(triggerSource_ <= DC1394_TRIGGER_SOURCE_MAX);
         newconfig->trigger_source = Trigger::trigger_source_names_[triggerSource_ - DC1394_TRIGGER_SOURCE_MIN];
-        ROS_ERROR("Failed to set trigger source");
+        RCLCPP_ERROR(private_nh_->get_logger(), "Failed to set trigger source");
         is_ok = false;
       }
     }
     else
     {
-      ROS_ERROR_STREAM("Unknown trigger source: " << newconfig->trigger_source);
+      RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "Unknown trigger source: " << newconfig->trigger_source);
       is_ok = false;
     }
   }
   else
   {
-    ROS_DEBUG("No triggering sources available");
+    RCLCPP_DEBUG(private_nh_->get_logger(), "No triggering sources available");
   }
 
   if (findTriggerPolarity(newconfig->trigger_polarity))
@@ -504,15 +504,15 @@ bool Trigger::reconfigure(Config *newconfig)
     if (!Trigger::setPolarity(camera_, triggerPolarity_))
     {
       // Possible if driver compiled against different version of libdc1394
-      ROS_ASSERT(triggerPolarity_ <= DC1394_TRIGGER_ACTIVE_MAX);
+      assert(triggerPolarity_ <= DC1394_TRIGGER_ACTIVE_MAX);
       newconfig->trigger_polarity = Trigger::trigger_polarity_names_[triggerPolarity_ - DC1394_TRIGGER_ACTIVE_MIN];
-      ROS_ERROR("Failed to set trigger polarity");
+      RCLCPP_ERROR(private_nh_->get_logger(), "Failed to set trigger polarity");
       is_ok = false;
     }
   }
   else
   {
-    ROS_ERROR_STREAM("Unknown trigger polarity: " << newconfig->trigger_polarity);
+    RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "Unknown trigger polarity: " << newconfig->trigger_polarity);
     is_ok = false;
   }
 
@@ -528,12 +528,12 @@ bool Trigger::reconfigure(Config *newconfig)
  */
 bool Trigger::initialize(Config *newconfig)
 {
-  ROS_INFO("[%016lx] has trigger support", camera_->guid);
+  RCLCPP_INFO(private_nh_->get_logger(), "[%016lx] has trigger support", camera_->guid);
 
   // Enumerate trigger sources
   if (!Trigger::enumSources(camera_, triggerSources_))
   {
-    ROS_ERROR("Failed to enumerate trigger sources");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Failed to enumerate trigger sources");
     return false;
   }
 

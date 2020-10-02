@@ -143,7 +143,7 @@ bool Features::initialize(Config *newconfig)
   // query all features for this device
   if (DC1394_SUCCESS != dc1394_feature_get_all(camera_, &feature_set_))
   {
-    ROS_ERROR("could not get camera feature information");
+    RCLCPP_ERROR(private_nh_->get_logger(), "Could not get camera feature information");
     return false;
   }
 

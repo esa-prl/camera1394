@@ -334,12 +334,12 @@ namespace Modes
     dc1394framerate_t rate = getFrameRate(camera, video_mode, frame_rate);
     if (DC1394_FRAMERATE_NUM == rate)
     {
-      ROS_WARN("No valid frame rate");
+      RCLCPP_WARN(private_nh->get_logger(), "No valid frame rate");
       return false; // failure
     }
     if (DC1394_SUCCESS != dc1394_video_set_framerate(camera, rate))
     {
-      ROS_WARN("Failed to set frame rate");
+      RCLCPP_WARN(private_nh->get_logger(), "Failed to set frame rate");
       return false; // failure
     }
     return true;
@@ -366,7 +366,7 @@ namespace Modes
                                                   DC1394_OPERATION_MODE_1394B)))
     {
       bmode = false;
-      ROS_WARN("failed to set IEEE1394b mode");
+      RCLCPP_WARN(private_nh->get_logger(), "failed to set IEEE1394b mode");
     }
 
     // start with highest speed supported
@@ -396,7 +396,7 @@ namespace Modes
         }
         else
         {
-          ROS_WARN("Unable to get ISO speed; assuming 400Mb/s");
+          RCLCPP_WARN(private_nh->get_logger(), "Unable to get ISO speed; assuming 400Mb/s");
           rate = 400;
           request = DC1394_ISO_SPEED_400;
         }
@@ -414,7 +414,7 @@ namespace Modes
     // set the requested speed
     if (DC1394_SUCCESS != dc1394_video_set_iso_speed(camera, request))
     {
-      ROS_WARN("Failed to set iso speed");
+      RCLCPP_WARN(private_nh->get_logger(), "Failed to set iso speed");
       return false;
     }
 
