@@ -37,7 +37,7 @@
 #include <tf/transform_listener.h>
 
 #include "camera1394/driver1394.hpp"
-#include "camera1394/Camera1394Config.h"
+#include "camera1394/camera1394_config.hpp"
 #include "camera1394/features.hpp"
 
 /** @file

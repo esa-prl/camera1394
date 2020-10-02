@@ -47,7 +47,7 @@
 // ROS includes
 #include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
-#include "camera1394/Camera1394Config.h"
+#include "camera1394/camera1394_config.hpp"
 #include "camera1394/registers.hpp"
 #include "camera1394/format7.hpp"
 

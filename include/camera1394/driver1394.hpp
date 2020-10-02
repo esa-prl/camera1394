@@ -46,7 +46,7 @@
 #include <sensor_msgs/msg/camera_info.hpp>
 
 #include "camera1394/dev_camera1394.hpp"
-#include "camera1394/Camera1394Config.h"
+#include "camera1394/camera1394_config.hpp"
 #include "camera1394/GetCameraRegisters.h"
 #include "camera1394/SetCameraRegisters.h"
 

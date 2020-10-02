@@ -40,9 +40,9 @@
 
 #include <dc1394/dc1394.h>
 
-#include "camera1394/Camera1394Config.h"
+#include "camera1394/camera1394_config.hpp"
 #include "camera1394/trigger.hpp"
-typedef camera1394::Camera1394Config Config;
+typedef Camera1394Config Config;
 
 /** @file
 
