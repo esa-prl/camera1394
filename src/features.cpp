@@ -120,7 +120,9 @@ namespace
  *
  *  @param camera address of DC1394 camera structure.
  */
-Features::Features(dc1394camera_t *camera) : camera_(camera)
+Features::Features(rclcpp::Node *private_nh, dc1394camera_t *camera)
+    : private_nh_(private_nh),
+      camera_(camera)
 {
   trigger_.reset(new Trigger(camera));
 }

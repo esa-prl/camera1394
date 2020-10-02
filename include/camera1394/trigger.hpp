@@ -36,6 +36,7 @@
 #define _TRIGGER_HPP_
 
 #include <dc1394/dc1394.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include "camera1394/camera1394_config.hpp"
 typedef camera1394::Camera1394Config Config;
@@ -62,6 +63,7 @@ private:
   /// driver parameter names, corresponding to DC1394 trigger sources
   static const std::string trigger_polarity_names_[DC1394_TRIGGER_ACTIVE_NUM];
 
+  rclcpp::Node *private_nh_;
   dc1394camera_t *camera_;
 
   dc1394trigger_mode_t triggerMode_;
@@ -81,7 +83,11 @@ public:
    *
    *  @param camera address of DC1394 camera structure.
    */
-  Trigger(dc1394camera_t *camera) : camera_(camera), triggerSources_((dc1394trigger_sources_t){0}), externalTriggerPowerState_(DC1394_OFF){};
+  Trigger(rclcpp::Node *private_nh, dc1394camera_t *camera)
+      : private_nh_(private_nh),
+        camera_(camera),
+        triggerSources_((dc1394trigger_sources_t){0}),
+        externalTriggerPowerState_(DC1394_OFF){};
 
   /** Return driver parameter name of DC1394 trigger_mode.
    *

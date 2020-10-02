@@ -71,7 +71,7 @@ namespace camera1394
   class Camera1394
   {
   public:
-    Camera1394();
+    Camera1394(rclcpp::Node *private_nh);
     ~Camera1394();
 
     int open(camera1394::Camera1394Config &newconfig);
@@ -114,6 +114,7 @@ namespace camera1394
 
   private:
     // private data
+    rclcpp::Node *private_nh_;
     dc1394camera_t *camera_;
     dc1394video_mode_t videoMode_;
     dc1394color_filter_t BayerPattern_;

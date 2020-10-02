@@ -44,7 +44,7 @@
 #include <dc1394/dc1394.h>
 
 #include "camera1394/camera1394_config.hpp"
-typedef Camera1394Config Config;
+typedef camera1394::Camera1394Config Config;
 
 /** @file
 

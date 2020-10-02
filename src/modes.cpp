@@ -34,7 +34,6 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#include <rclcpp/rclcpp.hpp>
 #include "camera1394/modes.hpp"
 
 /** @file
@@ -142,7 +141,8 @@ namespace Modes
    *                      requested value
    *  @return corresponding dc1394color_coding_t enum value selected
    */
-  dc1394color_coding_t getColorCoding(dc1394camera_t *camera,
+  dc1394color_coding_t getColorCoding(rclcpp::Node *private_nh,
+                                      dc1394camera_t *camera,
                                       dc1394video_mode_t video_mode,
                                       std::string &color_coding)
   {
@@ -210,7 +210,8 @@ namespace Modes
    *  @return corresponding dc1394framerate_t enum value selected,
    *                 if successful; DC1394_FRAMERATE_NUM if not.
    */
-  dc1394framerate_t getFrameRate(dc1394camera_t *camera,
+  dc1394framerate_t getFrameRate(rclcpp::Node *private_nh,
+                                 dc1394camera_t *camera,
                                  dc1394video_mode_t video_mode,
                                  double &frame_rate)
   {
@@ -258,7 +259,8 @@ namespace Modes
    *                      requested value
    *  @return corresponding dc1394video_mode_t enum value selected
    */
-  dc1394video_mode_t getVideoMode(dc1394camera_t *camera,
+  dc1394video_mode_t getVideoMode(rclcpp::Node *private_nh,
+                                  dc1394camera_t *camera,
                                   std::string &video_mode)
   {
     for (int vm = DC1394_VIDEO_MODE_MIN;
@@ -324,7 +326,8 @@ namespace Modes
    *                 requested value.
    *  @return true if successful; false if not.
    */
-  bool setFrameRate(dc1394camera_t *camera,
+  bool setFrameRate(rclcpp::Node *private_nh,
+                    dc1394camera_t *camera,
                     dc1394video_mode_t video_mode,
                     double &frame_rate)
   {
@@ -352,7 +355,9 @@ namespace Modes
    *
    *  @post IEEE1394b mode enabled if camera and bus support it.
    */
-  bool setIsoSpeed(dc1394camera_t *camera, int &iso_speed)
+  bool setIsoSpeed(rclcpp::Node *private_nh,
+                   dc1394camera_t *camera,
+                   int &iso_speed)
   {
     // Enable IEEE1394b mode if the camera and bus support it
     bool bmode = camera->bmode_capable;

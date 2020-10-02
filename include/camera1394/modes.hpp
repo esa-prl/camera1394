@@ -39,6 +39,7 @@
 #define _MODES_HPP_
 
 #include <dc1394/dc1394.h>
+#include <rclcpp/rclcpp.hpp>
 
 /** @file
 
@@ -54,19 +55,25 @@
 
 namespace Modes
 {
-  dc1394color_coding_t getColorCoding(dc1394camera_t *camera,
+  dc1394color_coding_t getColorCoding(rclcpp::Node *private_nh,
+                                      dc1394camera_t *camera,
                                       dc1394video_mode_t video_mode,
                                       std::string &color_coding);
-  dc1394framerate_t getFrameRate(dc1394camera_t *camera,
+  dc1394framerate_t getFrameRate(rclcpp::Node *private_nh,
+                                 dc1394camera_t *camera,
                                  dc1394video_mode_t video_mode,
                                  double &frame_rate);
-  dc1394video_mode_t getVideoMode(dc1394camera_t *camera,
+  dc1394video_mode_t getVideoMode(rclcpp::Node *private_nh,
+                                  dc1394camera_t *camera,
                                   std::string &video_mode);
 
-  bool setFrameRate(dc1394camera_t *camera,
+  bool setFrameRate(rclcpp::Node *private_nh,
+                    dc1394camera_t *camera,
                     dc1394video_mode_t video_mode,
                     double &frame_rate);
-  bool setIsoSpeed(dc1394camera_t *camera, int &iso_speed);
+  bool setIsoSpeed(rclcpp::Node *private_nh,
+                   dc1394camera_t *camera,
+                   int &iso_speed);
 } // namespace Modes
 
 #endif // _MODES_HPP_

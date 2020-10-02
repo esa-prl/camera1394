@@ -76,7 +76,9 @@ using namespace camera1394;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constructor
-Camera1394::Camera1394() : camera_(NULL)
+Camera1394::Camera1394(rclcpp::Node *private_nh)
+    : private_nh_(private_nh),
+      camera_(NULL)
 {
 }
 

@@ -42,7 +42,7 @@
 
 #include "camera1394/camera1394_config.hpp"
 #include "camera1394/trigger.hpp"
-typedef Camera1394Config Config;
+typedef camera1394::Camera1394Config Config;
 
 /** @file
 
@@ -61,7 +61,7 @@ typedef Camera1394Config Config;
 class Features
 {
 public:
-  Features(dc1394camera_t *camera);
+  Features(rclcpp::Node *private_nh, dc1394camera_t *camera);
   ~Features(){};
   bool initialize(Config *newconfig);
   void reconfigure(Config *newconfig);
@@ -124,6 +124,7 @@ private:
   dc1394camera_t *camera_;         ///< current camera
   dc1394featureset_t feature_set_; ///< that camera's feature set
   Config oldconfig_;               ///< previous Config settings
+  rclcpp::Node *private_nh_;       ///< handle to node
 };
 
 #endif // _FEATURES_HPP_
