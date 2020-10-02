@@ -17,8 +17,8 @@ protected:
     template <typename T>
     void declare_and_get_parameter(
         rcl_interfaces::msg::ParameterDescriptor desc,
-        T defValue,
-        T &outVal,
+        T default_value,
+        T &out_value,
         std::string log_info = std::string());
 
     void initialize_parameters();

@@ -11,23 +11,28 @@ Camera1394Node::~Camera1394Node()
 {
 }
 
+/** Helper funcion to declare and get parameters
+ * @param desc ParameterDescripor
+ * @param default_value Default value of parameter if not changed
+ * @param out_value Actual value of parameter
+ */
 template <typename T>
 void Camera1394Node::declare_and_get_parameter(
     rcl_interfaces::msg::ParameterDescriptor desc,
-    T defValue,
-    T &outVal,
+    T default_value,
+    T &out_value,
     std::string log_info)
 {
-    declare_parameter(desc.name, rclcpp::ParameterValue(defValue));
+    declare_parameter(desc.name, rclcpp::ParameterValue(default_value));
 
-    if (!get_parameter(desc.name, outVal))
+    if (!get_parameter(desc.name, out_value))
     {
-        RCLCPP_WARN_STREAM(get_logger(), "The parameter '" << desc.name << "' is not available or is not valid, using the default value: " << defValue);
+        RCLCPP_WARN_STREAM(get_logger(), "The parameter '" << desc.name << "' is not available or is not valid, using the default value: " << default_value);
     }
 
     if (!log_info.empty())
     {
-        RCLCPP_INFO_STREAM(get_logger(), log_info << outVal << (defValue == outVal ? " [default]" : " [changed]"));
+        RCLCPP_INFO_STREAM(get_logger(), log_info << out_value << (default_value == out_value ? " [default]" : " [changed]"));
     }
 }
 
@@ -117,7 +122,7 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
  * 
  * @param param_changed Changed parameter
  * @param expected_param_type Expected type of changed parameter
- * @param config_value Value of internal camera configuration
+ * @param config_value Value of internal camera configuration thats about to be changed
  * @param result Result of SetParameterEvent
  */
 template <typename ConfigValueType>
