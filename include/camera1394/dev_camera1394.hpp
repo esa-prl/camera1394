@@ -45,8 +45,8 @@
 #include <dc1394/dc1394.h>
 
 // ROS includes
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/CameraInfo.h>
+#include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
 #include "camera1394/Camera1394Config.h"
 #include "camera1394/registers.hpp"
 #include "camera1394/format7.hpp"

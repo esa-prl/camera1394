@@ -43,7 +43,7 @@
 #include <diagnostic_updater/publisher.h>
 #include <dynamic_reconfigure/server.h>
 #include <image_transport/image_transport.h>
-#include <sensor_msgs/CameraInfo.h>
+#include <sensor_msgs/msg/camera_info.hpp>
 
 #include "camera1394/dev_camera1394.hpp"
 #include "camera1394/Camera1394Config.h"

@@ -43,7 +43,7 @@
 #include <stdint.h>
 #include "camera1394/yuv.hpp"
 #include <cstdlib>
-#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/image_encodings.hpp>
 #include "camera1394/format7.hpp"
 #include "camera1394/modes.hpp"
 

@@ -50,7 +50,7 @@
 
 #include "camera1394/yuv.hpp"
 #include <cstdlib>
-#include <sensor_msgs/image_encodings.h>
+#include <sensor_msgs/image_encodings.hpp>
 #include "camera1394/dev_camera1394.hpp"
 #include "camera1394/features.hpp"
 #include "camera1394/modes.hpp"

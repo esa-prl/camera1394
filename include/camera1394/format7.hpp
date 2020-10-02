@@ -38,8 +38,8 @@
 #ifndef _FORMAT7_HPP_
 #define _FORMAT7_HPP_
 
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/Image.h>
+#include <sensor_msgs/msg/camera_info.hpp>
+#include <sensor_msgs/msg/image.hpp>
 
 #include <dc1394/dc1394.h>
 
