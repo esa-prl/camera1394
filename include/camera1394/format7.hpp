@@ -35,8 +35,8 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef _FORMAT7_H_
-#define _FORMAT7_H_
+#ifndef _FORMAT7_HPP_
+#define _FORMAT7_HPP_
 
 #include <sensor_msgs/CameraInfo.h>
 #include <sensor_msgs/Image.h>
@@ -63,17 +63,14 @@ typedef camera1394::Camera1394Config Config;
 class Format7
 {
 public:
-
-  Format7():
-    active_(false),
-    coding_(DC1394_COLOR_CODING_MONO8),
-    maxWidth_(0),
-    maxHeight_(0),
-    binning_x_(0),
-    binning_y_(0),
-    BayerPattern_((dc1394color_filter_t) DC1394_COLOR_FILTER_NUM)
-  {};
-  ~Format7() {};
+  Format7() : active_(false),
+              coding_(DC1394_COLOR_CODING_MONO8),
+              maxWidth_(0),
+              maxHeight_(0),
+              binning_x_(0),
+              binning_y_(0),
+              BayerPattern_((dc1394color_filter_t)DC1394_COLOR_FILTER_NUM){};
+  ~Format7(){};
 
   /** Format7 mode currently started */
   bool active(void)
@@ -88,7 +85,7 @@ public:
   void setOperationalParameters(sensor_msgs::CameraInfo &cinfo);
 
 private:
-  dc1394color_filter_t findBayerPattern(const char* bayer);
+  dc1394color_filter_t findBayerPattern(const char *bayer);
 
   bool active_;
   dc1394color_coding_t coding_;
@@ -106,4 +103,4 @@ private:
   dc1394color_filter_t BayerPattern_;
 };
 
-#endif // _FORMAT7_H_
+#endif // _FORMAT7_HPP_

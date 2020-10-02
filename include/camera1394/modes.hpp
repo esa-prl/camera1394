@@ -35,8 +35,8 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef _MODES_H_
-#define _MODES_H_
+#ifndef _MODES_HPP_
+#define _MODES_HPP_
 
 #include <dc1394/dc1394.h>
 
@@ -67,6 +67,6 @@ namespace Modes
                     dc1394video_mode_t video_mode,
                     double &frame_rate);
   bool setIsoSpeed(dc1394camera_t *camera, int &iso_speed);
-}
+} // namespace Modes
 
-#endif // _MODES_H_
+#endif // _MODES_HPP_

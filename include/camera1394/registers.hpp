@@ -32,8 +32,8 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef CAMERA1394_REGISTERS_H
-#define CAMERA1394_REGISTERS_H
+#ifndef CAMERA1394_REGISTERS_HPP_
+#define CAMERA1394_REGISTERS_HPP_
 
 #include <dc1394/dc1394.h>
 #include <vector>
@@ -48,49 +48,49 @@
 namespace camera1394
 {
 
-/** @brief Registers class
+  /** @brief Registers class
 
     Allows to to get/set control and status registers (CSR).
  */
-class Registers
-{
-public:
-  Registers(dc1394camera_t *camera);
-  Registers();
+  class Registers
+  {
+  public:
+    Registers(dc1394camera_t *camera);
+    Registers();
 
-  bool getControlRegisters(const uint64_t offset, const uint32_t num_regs,
-                           std::vector<uint32_t> &val);
-  bool setControlRegisters(const uint64_t offset,
-                           const std::vector<uint32_t> &val);
+    bool getControlRegisters(const uint64_t offset, const uint32_t num_regs,
+                             std::vector<uint32_t> &val);
+    bool setControlRegisters(const uint64_t offset,
+                             const std::vector<uint32_t> &val);
 
-  bool getAbsoluteRegister(const uint64_t offset, const uint32_t feature,
-                           uint32_t &val);
-  bool setAbsoluteRegister(const uint64_t offset, const uint32_t feature,
-                           const uint32_t val);
+    bool getAbsoluteRegister(const uint64_t offset, const uint32_t feature,
+                             uint32_t &val);
+    bool setAbsoluteRegister(const uint64_t offset, const uint32_t feature,
+                             const uint32_t val);
 
-  bool getFormat7Register(const uint64_t offset, const uint32_t mode,
-                          uint32_t &val);
-  bool setFormat7Register(const uint64_t offset, const uint32_t mode,
-                          const uint32_t val);
+    bool getFormat7Register(const uint64_t offset, const uint32_t mode,
+                            uint32_t &val);
+    bool setFormat7Register(const uint64_t offset, const uint32_t mode,
+                            const uint32_t val);
 
-  bool getAdvancedControlRegisters(const uint64_t offset,
-                                   const uint32_t num_regs,
-                                   std::vector<uint32_t> &val);
-  bool setAdvancedControlRegisters(const uint64_t offset,
-                                   const std::vector<uint32_t> &val);
+    bool getAdvancedControlRegisters(const uint64_t offset,
+                                     const uint32_t num_regs,
+                                     std::vector<uint32_t> &val);
+    bool setAdvancedControlRegisters(const uint64_t offset,
+                                     const std::vector<uint32_t> &val);
 
-  bool getPIORegister(const uint64_t offset, uint32_t &val);
-  bool setPIORegister(const uint64_t offset, const uint32_t val);
+    bool getPIORegister(const uint64_t offset, uint32_t &val);
+    bool setPIORegister(const uint64_t offset, const uint32_t val);
 
-  bool getSIORegister(const uint64_t offset, uint32_t &val);
-  bool setSIORegister(const uint64_t offset, const uint32_t val);
+    bool getSIORegister(const uint64_t offset, uint32_t &val);
+    bool setSIORegister(const uint64_t offset, const uint32_t val);
 
-  bool getStrobeRegister(const uint64_t offset, uint32_t &val);
-  bool setStrobeRegister(const uint64_t offset, const uint32_t val);
+    bool getStrobeRegister(const uint64_t offset, uint32_t &val);
+    bool setStrobeRegister(const uint64_t offset, const uint32_t val);
 
-private:
-  dc1394camera_t *camera_;
-};
-}
+  private:
+    dc1394camera_t *camera_;
+  };
+} // namespace camera1394
 
-#endif // CAMERA1394_REGISTERS_H
+#endif // CAMERA1394_REGISTERS_HPP_

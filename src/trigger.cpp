@@ -33,7 +33,7 @@
  *********************************************************************/
 
 #include <ros/ros.h>
-#include "trigger.h"
+#include "camera1394/trigger.hpp"
 
 /** @file
 
@@ -43,33 +43,49 @@
  */
 
 // initializing constants
-const std::string Trigger::trigger_mode_names_[DC1394_TRIGGER_MODE_NUM] = {"mode_0", "mode_1", "mode_2", "mode_3", "mode_4",
-                                                                         "mode_5", "mode_14", "mode_15", };
-const std::string Trigger::trigger_source_names_[DC1394_TRIGGER_SOURCE_NUM] = {"source_0", "source_1", "source_2",
-                                                                             "source_3", "source_software", };
-const std::string Trigger::trigger_polarity_names_[DC1394_TRIGGER_ACTIVE_NUM] = {"active_low", "active_high", };
+const std::string Trigger::trigger_mode_names_[DC1394_TRIGGER_MODE_NUM] = {
+    "mode_0",
+    "mode_1",
+    "mode_2",
+    "mode_3",
+    "mode_4",
+    "mode_5",
+    "mode_14",
+    "mode_15",
+};
+const std::string Trigger::trigger_source_names_[DC1394_TRIGGER_SOURCE_NUM] = {
+    "source_0",
+    "source_1",
+    "source_2",
+    "source_3",
+    "source_software",
+};
+const std::string Trigger::trigger_polarity_names_[DC1394_TRIGGER_ACTIVE_NUM] = {
+    "active_low",
+    "active_high",
+};
 
 bool Trigger::findTriggerMode(std::string str)
 {
   if (str == "mode_0")
     triggerMode_ = DC1394_TRIGGER_MODE_0;
-  else if(str == "mode_1")
+  else if (str == "mode_1")
     triggerMode_ = DC1394_TRIGGER_MODE_1;
-  else if(str == "mode_2")
+  else if (str == "mode_2")
     triggerMode_ = DC1394_TRIGGER_MODE_2;
-  else if(str == "mode_3")
+  else if (str == "mode_3")
     triggerMode_ = DC1394_TRIGGER_MODE_3;
-  else if(str == "mode_4")
+  else if (str == "mode_4")
     triggerMode_ = DC1394_TRIGGER_MODE_4;
-  else if(str == "mode_5")
+  else if (str == "mode_5")
     triggerMode_ = DC1394_TRIGGER_MODE_5;
-  else if(str == "mode_14")
+  else if (str == "mode_14")
     triggerMode_ = DC1394_TRIGGER_MODE_14;
-  else if(str == "mode_15")
+  else if (str == "mode_15")
     triggerMode_ = DC1394_TRIGGER_MODE_15;
   else
   {
-    triggerMode_ = (dc1394trigger_mode_t) DC1394_TRIGGER_MODE_NUM;
+    triggerMode_ = (dc1394trigger_mode_t)DC1394_TRIGGER_MODE_NUM;
     return false;
   }
 
@@ -80,17 +96,17 @@ bool Trigger::findTriggerSource(std::string str)
 {
   if (str == "source_0")
     triggerSource_ = DC1394_TRIGGER_SOURCE_0;
-  else if(str == "source_1")
+  else if (str == "source_1")
     triggerSource_ = DC1394_TRIGGER_SOURCE_1;
-  else if(str == "source_2")
+  else if (str == "source_2")
     triggerSource_ = DC1394_TRIGGER_SOURCE_2;
-  else if(str == "source_3")
+  else if (str == "source_3")
     triggerSource_ = DC1394_TRIGGER_SOURCE_3;
-  else if(str == "source_software")
+  else if (str == "source_software")
     triggerSource_ = DC1394_TRIGGER_SOURCE_SOFTWARE;
   else
   {
-    triggerSource_ = (dc1394trigger_source_t) DC1394_TRIGGER_SOURCE_NUM;
+    triggerSource_ = (dc1394trigger_source_t)DC1394_TRIGGER_SOURCE_NUM;
     return false;
   }
 
@@ -99,13 +115,13 @@ bool Trigger::findTriggerSource(std::string str)
 
 bool Trigger::findTriggerPolarity(std::string str)
 {
-  if(str == "active_low")
+  if (str == "active_low")
     triggerPolarity_ = DC1394_TRIGGER_ACTIVE_LOW;
-  else if(str == "active_high")
+  else if (str == "active_high")
     triggerPolarity_ = DC1394_TRIGGER_ACTIVE_HIGH;
   else
   {
-    triggerPolarity_ = (dc1394trigger_polarity_t) DC1394_TRIGGER_ACTIVE_NUM;
+    triggerPolarity_ = (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM;
     return false;
   }
 
@@ -114,8 +130,9 @@ bool Trigger::findTriggerPolarity(std::string str)
 
 bool Trigger::checkTriggerSource(dc1394trigger_source_t source)
 {
-  for(size_t i = 0; i < triggerSources_.num; i++)
-    if(source == triggerSources_.sources[i]) return true;
+  for (size_t i = 0; i < triggerSources_.num; i++)
+    if (source == triggerSources_.sources[i])
+      return true;
 
   return false;
 }
@@ -134,19 +151,19 @@ bool Trigger::enumSources(dc1394camera_t *camera, dc1394trigger_sources_t &sourc
     return false; // failure
   }
 
-    std::ostringstream ss;
-    if(sources.num != 0)
-    {
-      for(size_t i = 0; i < sources.num - 1; i++)
-        ss << triggerSourceName(sources.sources[i]) << ", ";
-      ss << triggerSourceName(sources.sources[sources.num - 1]);
-    }
-    else
-    {
-      ss << "none";
-    }
+  std::ostringstream ss;
+  if (sources.num != 0)
+  {
+    for (size_t i = 0; i < sources.num - 1; i++)
+      ss << triggerSourceName(sources.sources[i]) << ", ";
+    ss << triggerSourceName(sources.sources[sources.num - 1]);
+  }
+  else
+  {
+    ss << "none";
+  }
 
-    ROS_DEBUG_STREAM("Trigger sources: " << ss.str());
+  ROS_DEBUG_STREAM("Trigger sources: " << ss.str());
   return true;
 }
 
@@ -165,7 +182,7 @@ dc1394trigger_polarity_t Trigger::getPolarity(dc1394camera_t *camera)
   if (err != DC1394_SUCCESS)
   {
     ROS_FATAL("getPolarity() failed: %d", err);
-    return (dc1394trigger_polarity_t) DC1394_TRIGGER_ACTIVE_NUM; // failure
+    return (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM; // failure
   }
 
   if (has_polarity == DC1394_TRUE)
@@ -174,13 +191,13 @@ dc1394trigger_polarity_t Trigger::getPolarity(dc1394camera_t *camera)
     if (err != DC1394_SUCCESS)
     {
       ROS_FATAL("getPolarity() failed: %d", err);
-      return (dc1394trigger_polarity_t) DC1394_TRIGGER_ACTIVE_NUM; // failure
+      return (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM; // failure
     }
   }
   else
   {
     ROS_ERROR("Polarity is not supported");
-    return (dc1394trigger_polarity_t) DC1394_TRIGGER_ACTIVE_NUM; // failure
+    return (dc1394trigger_polarity_t)DC1394_TRIGGER_ACTIVE_NUM; // failure
   }
 
   return current_polarity; // success
@@ -208,7 +225,8 @@ bool Trigger::setPolarity(dc1394camera_t *camera, dc1394trigger_polarity_t &pola
   if (has_polarity == DC1394_TRUE)
   {
     // if config not changed, then do nothing
-    if(current_polarity == polarity) return true;
+    if (current_polarity == polarity)
+      return true;
 
     err = dc1394_external_trigger_set_polarity(camera, polarity);
     if (err != DC1394_SUCCESS)
@@ -259,7 +277,8 @@ bool Trigger::setExternalTriggerPowerState(dc1394camera_t *camera, dc1394switch_
   dc1394switch_t current_state = getExternalTriggerPowerState(camera);
 
   // if config not changed, then do nothing
-  if(current_state == state) return true;
+  if (current_state == state)
+    return true;
 
   dc1394error_t err = dc1394_external_trigger_set_power(camera, state);
   if (err != DC1394_SUCCESS)
@@ -303,7 +322,8 @@ bool Trigger::setSoftwareTriggerPowerState(dc1394camera_t *camera, dc1394switch_
   dc1394switch_t current_state = getSoftwareTriggerPowerState(camera);
 
   // if config not changed, then do nothing
-  if(current_state == state) return true;
+  if (current_state == state)
+    return true;
 
   dc1394error_t err = dc1394_software_trigger_set_power(camera, state);
   if (err != DC1394_SUCCESS)
@@ -330,7 +350,7 @@ dc1394trigger_mode_t Trigger::getMode(dc1394camera_t *camera)
   if (err != DC1394_SUCCESS)
   {
     ROS_FATAL("getTriggerMode() failed: %d", err);
-    return (dc1394trigger_mode_t) DC1394_TRIGGER_MODE_NUM; // failure
+    return (dc1394trigger_mode_t)DC1394_TRIGGER_MODE_NUM; // failure
   }
 
   return mode;
@@ -348,7 +368,8 @@ bool Trigger::setMode(dc1394camera_t *camera, dc1394trigger_mode_t &mode)
   dc1394trigger_mode_t current_mode = getMode(camera);
 
   // if config not changed, then do nothing
-  if(current_mode == mode) return true;
+  if (current_mode == mode)
+    return true;
 
   dc1394error_t err = dc1394_external_trigger_set_mode(camera, mode);
   if (err != DC1394_SUCCESS)
@@ -375,7 +396,7 @@ dc1394trigger_source_t Trigger::getSource(dc1394camera_t *camera)
   if (err != DC1394_SUCCESS)
   {
     ROS_FATAL("getTriggerSource() failed: %d", err);
-    return (dc1394trigger_source_t) DC1394_TRIGGER_SOURCE_NUM; // failure
+    return (dc1394trigger_source_t)DC1394_TRIGGER_SOURCE_NUM; // failure
   }
 
   return source;
@@ -393,7 +414,8 @@ bool Trigger::setSource(dc1394camera_t *camera, dc1394trigger_source_t &source)
   dc1394trigger_source_t current_source = getSource(camera);
 
   // if config not changed, then do nothing
-  if(current_source == source) return true;
+  if (current_source == source)
+    return true;
 
   dc1394error_t err = dc1394_external_trigger_set_source(camera, source);
 
@@ -421,7 +443,7 @@ bool Trigger::reconfigure(Config *newconfig)
   //////////////////////////////////////////////////////////////
   // set triggering modes
   //////////////////////////////////////////////////////////////
-  dc1394switch_t on_off = (dc1394switch_t) newconfig->external_trigger;
+  dc1394switch_t on_off = (dc1394switch_t)newconfig->external_trigger;
   if (!Trigger::setExternalTriggerPowerState(camera_, on_off))
   {
     newconfig->external_trigger = on_off;
@@ -429,7 +451,7 @@ bool Trigger::reconfigure(Config *newconfig)
     is_ok = false;
   }
 
-  on_off = (dc1394switch_t) newconfig->software_trigger;
+  on_off = (dc1394switch_t)newconfig->software_trigger;
   if (!Trigger::setSoftwareTriggerPowerState(camera_, on_off))
   {
     newconfig->software_trigger = on_off;

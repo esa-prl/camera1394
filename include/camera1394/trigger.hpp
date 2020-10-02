@@ -32,8 +32,8 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef _TRIGGER_H_
-#define _TRIGGER_H_
+#ifndef _TRIGGER_HPP_
+#define _TRIGGER_HPP_
 
 #include <dc1394/dc1394.h>
 
@@ -81,9 +81,7 @@ public:
    *
    *  @param camera address of DC1394 camera structure.
    */
-  Trigger(dc1394camera_t *camera):
-    camera_(camera), triggerSources_((dc1394trigger_sources_t){0}), externalTriggerPowerState_(DC1394_OFF)
-  {};
+  Trigger(dc1394camera_t *camera) : camera_(camera), triggerSources_((dc1394trigger_sources_t){0}), externalTriggerPowerState_(DC1394_OFF){};
 
   /** Return driver parameter name of DC1394 trigger_mode.
    *
@@ -151,4 +149,4 @@ public:
   bool initialize(Config *newconfig);
 };
 
-#endif // _TRIGGER_H_
+#endif // _TRIGGER_HPP_

@@ -18,12 +18,12 @@
 // modify it under the terms of the GNU Lesser General Public License
 // as published by the Free Software Foundation; either version 2 of
 // the License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // Lesser General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU Lesser General Public
 // License along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
@@ -39,8 +39,8 @@
 
  */
 
-#ifndef DEV_CAMERA1394_HH
-#define DEV_CAMERA1394_HH
+#ifndef DEV_CAMERA1394_HPP_
+#define DEV_CAMERA1394_HPP_
 
 #include <dc1394/dc1394.h>
 
@@ -48,20 +48,21 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/CameraInfo.h>
 #include "camera1394/Camera1394Config.h"
-#include "registers.h"
-#include "format7.h"
+#include "camera1394/registers.hpp"
+#include "camera1394/format7.hpp"
 
-class Features;                      // actually defined in features.h
+class Features; // actually defined in features.h
 
 namespace camera1394
 {
   //! Macro for defining an exception with a given parent
   //  (std::runtime_error should be top parent)
   // code borrowed from drivers/laser/hokuyo_driver/hokuyo.h
-#define DEF_EXCEPTION(name, parent)		\
-  class name  : public parent {			\
-  public:					\
-    name (const char* msg) : parent (msg) {}	\
+#define DEF_EXCEPTION(name, parent)        \
+  class name : public parent               \
+  {                                        \
+  public:                                  \
+    name(const char *msg) : parent(msg) {} \
   }
 
   //! A standard Camera1394 exception
@@ -71,11 +72,11 @@ namespace camera1394
   {
   public:
     Camera1394();
-    ~Camera1394 ();
+    ~Camera1394();
 
     int open(camera1394::Camera1394Config &newconfig);
     int close();
-    bool readData (sensor_msgs::Image &image);
+    bool readData(sensor_msgs::Image &image);
 
     /** check whether CameraInfo matches current video mode
      *
@@ -84,13 +85,13 @@ namespace camera1394
      *  @return true if camera dimensions match calibration
      */
     bool checkCameraInfo(const sensor_msgs::Image &image,
-			 const sensor_msgs::CameraInfo &ci)
-                          
+                         const sensor_msgs::CameraInfo &ci)
+
     {
       if (format7_.active())
         return format7_.checkCameraInfo(ci);
       else
-	return (ci.width == image.width && ci.height == image.height);
+        return (ci.width == image.width && ci.height == image.height);
     }
 
     /** set operational parameter fields in CameraInfo message
@@ -112,7 +113,6 @@ namespace camera1394
     boost::shared_ptr<Registers> registers_;
 
   private:
-      
     // private data
     dc1394camera_t *camera_;
     dc1394video_mode_t videoMode_;
@@ -124,9 +124,9 @@ namespace camera1394
     float time_offset_;
 
     void SafeCleanup();
-    void findBayerPattern(const char*);
-    bool findBayerMethod(const char*);
+    void findBayerPattern(const char *);
+    bool findBayerMethod(const char *);
   };
-};
+}; // namespace camera1394
 
-#endif // DEV_CAMERA1394_HH
+#endif // DEV_CAMERA1394_HPP_

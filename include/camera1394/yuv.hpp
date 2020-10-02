@@ -33,8 +33,8 @@
  *  * use yuv namespace
  */
 
-#ifndef _YUV_H_
-#define _YUV_H_
+#ifndef _YUV_HPP_
+#define _YUV_HPP_
 
 #include <dc1394/dc1394.h>
 
@@ -55,7 +55,8 @@ namespace yuv
     register int y, u, v;
     register int r, g, b;
 
-    while (i > 0) {
+    while (i > 0)
+    {
       v = src[i--] - 128;
       y = src[i--];
       u = src[i--] - 128;
@@ -70,26 +71,26 @@ namespace yuv
   void inline uyvy2rgb(unsigned char *src, unsigned char *dest,
                        unsigned long long int NumPixels)
   {
-    register int i = (NumPixels << 1)-1;
-    register int j = NumPixels + ( NumPixels << 1 ) -1;
+    register int i = (NumPixels << 1) - 1;
+    register int j = NumPixels + (NumPixels << 1) - 1;
     register int y0, y1, u, v;
     register int r, g, b;
 
     while (i > 0)
-      {
-        y1 = (unsigned char) src[i--];
-        v  = (unsigned char) src[i--] - 128;
-        y0 = (unsigned char) src[i--];
-        u  = (unsigned char) src[i--] - 128;
-        YUV2RGB (y1, u, v, r, g, b);
-        dest[j--] = b;
-        dest[j--] = g;
-        dest[j--] = r;
-        YUV2RGB (y0, u, v, r, g, b);
-        dest[j--] = b;
-        dest[j--] = g;
-        dest[j--] = r;
-      }
+    {
+      y1 = (unsigned char)src[i--];
+      v = (unsigned char)src[i--] - 128;
+      y0 = (unsigned char)src[i--];
+      u = (unsigned char)src[i--] - 128;
+      YUV2RGB(y1, u, v, r, g, b);
+      dest[j--] = b;
+      dest[j--] = g;
+      dest[j--] = r;
+      YUV2RGB(y0, u, v, r, g, b);
+      dest[j--] = b;
+      dest[j--] = g;
+      dest[j--] = r;
+    }
   }
 
   /** unpack yuv411 to rgb8 */
@@ -101,7 +102,8 @@ namespace yuv
     register int y0, y1, y2, y3, u, v;
     register int r, g, b;
 
-    while (i > 0) {
+    while (i > 0)
+    {
       y3 = src[i--];
       y2 = src[i--];
       v = src[i--] - 128;
@@ -126,6 +128,6 @@ namespace yuv
       dest[j--] = r;
     }
   }
-}
+} // namespace yuv
 
-#endif // _YUV_H_
+#endif // _YUV_HPP_

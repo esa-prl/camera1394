@@ -35,13 +35,13 @@
 *  POSSIBILITY OF SUCH DAMAGE.
 *********************************************************************/
 
-#ifndef _FEATURES_H_
-#define _FEATURES_H_
+#ifndef _FEATURES_HPP_
+#define _FEATURES_HPP_
 
 #include <dc1394/dc1394.h>
 
 #include "camera1394/Camera1394Config.h"
-#include "trigger.h"
+#include "camera1394/trigger.hpp"
 typedef camera1394::Camera1394Config Config;
 
 /** @file
@@ -61,22 +61,21 @@ typedef camera1394::Camera1394Config Config;
 class Features
 {
 public:
-
   Features(dc1394camera_t *camera);
-  ~Features() {};
+  ~Features(){};
   bool initialize(Config *newconfig);
   void reconfigure(Config *newconfig);
 
   inline bool isTriggerPowered()
   {
-	  return trigger_->isPowered();
+    return trigger_->isPowered();
   }
 
 private:
-  typedef int state_t;      ///< camera1394::Camera1394_* state values
+  typedef int state_t; ///< camera1394::Camera1394_* state values
 
   void configure(dc1394feature_t feature, int *control,
-                 double *value, double *value2=NULL);
+                 double *value, double *value2 = NULL);
   state_t getState(dc1394feature_info_t *finfo);
   void getValues(dc1394feature_info_t *finfo,
                  double *value, double *value2);
@@ -92,10 +91,10 @@ private:
   inline bool hasMode(dc1394feature_info_t *finfo, dc1394feature_mode_t mode)
   {
     for (uint32_t i = 0; i < finfo->modes.num; ++i)
-      {
-        if (finfo->modes.modes[i] == mode)
-          return true;
-      }
+    {
+      if (finfo->modes.modes[i] == mode)
+        return true;
+    }
     return false;
   }
 
@@ -106,8 +105,7 @@ private:
    */
   inline bool hasTrigger(void)
   {
-    return DC1394_TRUE == feature_set_.feature[DC1394_FEATURE_TRIGGER
-                                               - DC1394_FEATURE_MIN].available;
+    return DC1394_TRUE == feature_set_.feature[DC1394_FEATURE_TRIGGER - DC1394_FEATURE_MIN].available;
   }
 
   // pointer to subordinate trigger class
@@ -123,9 +121,9 @@ private:
                        double old_value, double *value,
                        double old_value2, double *value2);
 
-  dc1394camera_t *camera_;              ///< current camera
-  dc1394featureset_t feature_set_;      ///< that camera's feature set
-  Config oldconfig_;                    ///< previous Config settings
+  dc1394camera_t *camera_;         ///< current camera
+  dc1394featureset_t feature_set_; ///< that camera's feature set
+  Config oldconfig_;               ///< previous Config settings
 };
 
-#endif // _FEATURES_H_
+#endif // _FEATURES_HPP_

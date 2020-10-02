@@ -45,7 +45,7 @@
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/CameraInfo.h>
 
-#include "dev_camera1394.h"
+#include "camera1394/dev_camera1394.hpp"
 #include "camera1394/Camera1394Config.h"
 #include "camera1394/GetCameraRegisters.h"
 #include "camera1394/SetCameraRegisters.h"
