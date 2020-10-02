@@ -39,8 +39,8 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <camera_info_manager/camera_info_manager.h>
-#include <diagnostic_updater/diagnostic_updater.h>
-#include <diagnostic_updater/publisher.h>
+#include <diagnostic_updater/diagnostic_updater.hpp>
+#include <diagnostic_updater/publisher.hpp>
 #include <dynamic_reconfigure/server.h>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/msg/camera_info.hpp>
