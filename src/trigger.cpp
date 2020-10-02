@@ -31,8 +31,7 @@
  *  ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
-
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 #include "camera1394/trigger.hpp"
 
 /** @file
