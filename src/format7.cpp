@@ -230,7 +230,7 @@ bool Format7::start(dc1394camera_t *camera,
 
   // Try to set requested color coding. Use current camera value if
   // requested coding is not supported by the camera.
-  coding_ = Modes::getColorCoding(camera, mode,
+  coding_ = Modes::getColorCoding(private_nh_, camera, mode,
                                   newconfig.format7_color_coding);
 
   if (DC1394_SUCCESS != dc1394_format7_set_color_coding(camera, mode,

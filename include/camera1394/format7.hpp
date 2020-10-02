@@ -42,6 +42,7 @@
 #include <sensor_msgs/msg/image.hpp>
 
 #include <dc1394/dc1394.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include "camera1394/camera1394_config.hpp"
 typedef camera1394::Camera1394Config Config;
@@ -63,13 +64,15 @@ typedef camera1394::Camera1394Config Config;
 class Format7
 {
 public:
-  Format7() : active_(false),
-              coding_(DC1394_COLOR_CODING_MONO8),
-              maxWidth_(0),
-              maxHeight_(0),
-              binning_x_(0),
-              binning_y_(0),
-              BayerPattern_((dc1394color_filter_t)DC1394_COLOR_FILTER_NUM){};
+  Format7(rclcpp::Node *private_nh)
+      : private_nh_(private_nh),
+        active_(false),
+        coding_(DC1394_COLOR_CODING_MONO8),
+        maxWidth_(0),
+        maxHeight_(0),
+        binning_x_(0),
+        binning_y_(0),
+        BayerPattern_((dc1394color_filter_t)DC1394_COLOR_FILTER_NUM){};
   ~Format7(){};
 
   /** Format7 mode currently started */
@@ -85,6 +88,7 @@ public:
   void setOperationalParameters(sensor_msgs::CameraInfo &cinfo);
 
 private:
+  rclcpp::Node *private_nh_;
   dc1394color_filter_t findBayerPattern(const char *bayer);
 
   bool active_;
