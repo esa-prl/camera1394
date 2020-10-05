@@ -124,7 +124,7 @@ Features::Features(rclcpp::Node *private_nh, dc1394camera_t *camera)
     : private_nh_(private_nh),
       camera_(camera)
 {
-  trigger_.reset(new Trigger(camera));
+  trigger_.reset(new Trigger(private_nh_, camera));
 }
 
 /** Query and set all features for newly opened (or reopened) device.
@@ -383,7 +383,6 @@ void Features::configure(dc1394feature_t feature, int *control,
       }
     }
     break;
-
   case camera1394::Camera1394_OnePush:
     // Try to set OnePush mode
     setMode(finfo, DC1394_FEATURE_MODE_ONE_PUSH_AUTO);

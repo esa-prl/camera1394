@@ -109,7 +109,7 @@ private:
   }
 
   // pointer to subordinate trigger class
-  boost::shared_ptr<Trigger> trigger_;
+  std::shared_ptr<Trigger> trigger_;
 
   bool setMode(dc1394feature_info_t *finfo, dc1394feature_mode_t mode);
   void setPower(dc1394feature_info_t *finfo, dc1394switch_t on_off);
