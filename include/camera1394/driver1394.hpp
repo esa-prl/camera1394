@@ -41,7 +41,6 @@
 #include <camera_info_manager/camera_info_manager.h>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 #include <diagnostic_updater/publisher.hpp>
-#include <dynamic_reconfigure/server.h>
 #include <image_transport/image_transport.h>
 #include <sensor_msgs/msg/camera_info.hpp>
 
@@ -119,7 +118,6 @@ namespace camera1394_driver
 
         /** dynamic parameter configuration */
         camera1394::Camera1394Config config_;
-        dynamic_reconfigure::Server<camera1394::Camera1394Config> srv_;
 
         /** camera calibration information */
         boost::shared_ptr<camera_info_manager::CameraInfoManager> cinfo_;

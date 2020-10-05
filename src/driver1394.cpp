@@ -74,7 +74,6 @@ namespace camera1394_driver
                                                                     retries_(0),
                                                                     consecutive_read_errors_(0),
                                                                     dev_(new camera1394::Camera1394()),
-                                                                    srv_(priv_nh),
                                                                     cinfo_(new camera_info_manager::CameraInfoManager(camera_nh_)),
                                                                     calibration_matches_(true),
                                                                     it_(new image_transport::ImageTransport(camera_nh_)),
@@ -390,7 +389,7 @@ namespace camera1394_driver
    */
     void Camera1394Driver::setup(void)
     {
-        srv_.setCallback(boost::bind(&Camera1394Driver::reconfig, this, _1, _2));
+        // srv_.setCallback(boost::bind(&Camera1394Driver::reconfig, this, _1, _2));
     }
 
     /** driver termination */
