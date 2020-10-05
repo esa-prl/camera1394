@@ -83,9 +83,9 @@ public:
   bool start(dc1394camera_t *camera, dc1394video_mode_t mode,
              Config &newconfig);
   void stop(void);
-  void unpackData(sensor_msgs::Image &image, uint8_t *capture_buffer);
-  bool checkCameraInfo(const sensor_msgs::CameraInfo &cinfo);
-  void setOperationalParameters(sensor_msgs::CameraInfo &cinfo);
+  void unpackData(sensor_msgs::msg::Image &image, uint8_t *capture_buffer);
+  bool checkCameraInfo(const sensor_msgs::msg::CameraInfo &cinfo);
+  void setOperationalParameters(sensor_msgs::msg::CameraInfo &cinfo);
 
 private:
   rclcpp::Node *private_nh_;
@@ -97,7 +97,7 @@ private:
   uint32_t maxHeight_;
 
   /** currently configured region of interest */
-  sensor_msgs::RegionOfInterest roi_;
+  sensor_msgs::msg::RegionOfInterest roi_;
 
   /** current Format7 video mode binning */
   uint32_t binning_x_;

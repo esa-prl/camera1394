@@ -330,8 +330,8 @@ void Features::configure(dc1394feature_t feature, int *control,
       }
       else
       {
-        ROS_WARN_STREAM("failed to get feature "
-                        << featureName(feature) << " boundaries ");
+        RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to get feature "
+                                                          << featureName(feature) << " boundaries ");
       }
 
       // @todo handle absolute White Balance values
@@ -339,8 +339,8 @@ void Features::configure(dc1394feature_t feature, int *control,
       if (DC1394_SUCCESS !=
           dc1394_feature_set_absolute_value(camera_, feature, fval))
       {
-        ROS_WARN_STREAM("failed to set feature "
-                        << featureName(feature) << " to " << fval);
+        RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to set feature "
+                                                          << featureName(feature) << " to " << fval);
       }
     }
     else // no float representation
@@ -378,8 +378,8 @@ void Features::configure(dc1394feature_t feature, int *control,
       }
       if (rc != DC1394_SUCCESS)
       {
-        ROS_WARN_STREAM("failed to set feature "
-                        << featureName(feature) << " to " << ival);
+        RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to set feature "
+                                                          << featureName(feature) << " to " << ival);
       }
     }
     break;
@@ -394,19 +394,19 @@ void Features::configure(dc1394feature_t feature, int *control,
 
   case camera1394::Camera1394_None:
     // Invalid user input, because this feature actually does exist.
-    ROS_INFO_STREAM("feature " << featureName(feature)
-                               << " exists, cannot set to None");
+    RCLCPP_INFO_STREAM(private_nh_->get_logger(), "feature " << featureName(feature)
+                                                             << " exists, cannot set to None");
     break;
 
   default:
-    ROS_WARN_STREAM("unknown state (" << *control
-                                      << ") for feature " << featureName(feature));
+    RCLCPP_WARN_STREAM(private_nh_->get_logger(), "unknown state (" << *control
+                                                                    << ") for feature " << featureName(feature));
   }
 
   // return actual state reported by the device
   *control = getState(finfo);
-  ROS_DEBUG_STREAM("feature " << featureName(feature)
-                              << " now in state " << *control);
+  RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "feature " << featureName(feature)
+                                                            << " now in state " << *control);
 }
 
 /** Get current state of a feature from the camera.
@@ -434,8 +434,8 @@ Features::state_t Features::getState(dc1394feature_info_t *finfo)
     rc = dc1394_feature_get_power(camera_, feature, &pwr);
     if (rc != DC1394_SUCCESS)
     {
-      ROS_WARN_STREAM("failed to get feature " << featureName(feature)
-                                               << " Power setting ");
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to get feature " << featureName(feature)
+                                                                             << " Power setting ");
     }
     else if (pwr == DC1394_OFF)
     {
@@ -449,8 +449,8 @@ Features::state_t Features::getState(dc1394feature_info_t *finfo)
   rc = dc1394_feature_get_mode(camera_, feature, &mode);
   if (rc != DC1394_SUCCESS)
   {
-    ROS_WARN_STREAM("failed to get current mode of feature "
-                    << featureName(feature));
+    RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to get current mode of feature "
+                                                      << featureName(feature));
     // treat unavailable mode as Off
     return camera1394::Camera1394_Off;
   }
@@ -485,8 +485,8 @@ void Features::getValues(dc1394feature_info_t *finfo,
 
   if (!finfo->readout_capable)
   {
-    ROS_INFO_STREAM("feature " << featureName(feature)
-                               << " value not available from device");
+    RCLCPP_INFO_STREAM(private_nh_->get_logger(), "feature " << featureName(feature)
+                                                             << " value not available from device");
     return;
   }
 
@@ -514,14 +514,14 @@ void Features::getValues(dc1394feature_info_t *finfo,
     }
     if (DC1394_SUCCESS == rc)
     {
-      ROS_DEBUG_STREAM("feature " << featureName(feature)
-                                  << " Blue/U: " << *value
-                                  << " Red/V: " << *value2);
+      RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "feature " << featureName(feature)
+                                                                << " Blue/U: " << *value
+                                                                << " Red/V: " << *value2);
     }
     else
     {
-      ROS_WARN_STREAM("failed to get values for feature "
-                      << featureName(feature));
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to get values for feature "
+                                                        << featureName(feature));
     }
   }
   else
@@ -548,13 +548,13 @@ void Features::getValues(dc1394feature_info_t *finfo,
     }
     if (DC1394_SUCCESS == rc)
     {
-      ROS_DEBUG_STREAM("feature " << featureName(feature)
-                                  << " has value " << *value);
+      RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "feature " << featureName(feature)
+                                                                << " has value " << *value);
     }
     else
     {
-      ROS_WARN_STREAM("failed to get value of feature "
-                      << featureName(feature));
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to get value of feature "
+                                                        << featureName(feature));
     }
   }
 }
@@ -575,21 +575,21 @@ bool Features::setMode(dc1394feature_info_t *finfo, dc1394feature_mode_t mode)
     // first, make sure the feature is powered on
     setPower(finfo, DC1394_ON);
 
-    ROS_DEBUG_STREAM("setting feature " << featureName(feature)
-                                        << " mode to " << modeName(mode));
+    RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "setting feature " << featureName(feature)
+                                                                      << " mode to " << modeName(mode));
     if (DC1394_SUCCESS !=
         dc1394_feature_set_mode(camera_, feature, mode))
     {
-      ROS_WARN_STREAM("failed to set feature " << featureName(feature)
-                                               << " mode to " << modeName(mode));
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to set feature " << featureName(feature)
+                                                                             << " mode to " << modeName(mode));
       return false;
     }
   }
   else
   {
     // device does not support this mode for this feature
-    ROS_DEBUG_STREAM("no " << modeName(mode)
-                           << " mode for feature " << featureName(feature));
+    RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "no " << modeName(mode)
+                                                         << " mode for feature " << featureName(feature));
     return false;
   }
   return true;
@@ -607,20 +607,20 @@ void Features::setPower(dc1394feature_info_t *finfo, dc1394switch_t on_off)
   dc1394feature_t feature = finfo->id;
   if (finfo->on_off_capable)
   {
-    ROS_DEBUG_STREAM("Setting power for feature " << featureName(feature)
-                                                  << " to " << on_off);
+    RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "Setting power for feature " << featureName(feature)
+                                                                                << " to " << on_off);
     if (DC1394_SUCCESS !=
         dc1394_feature_set_power(camera_, feature, on_off))
     {
-      ROS_WARN_STREAM("failed to set feature " << featureName(feature)
-                                               << " power to " << on_off);
+      RCLCPP_WARN_STREAM(private_nh_->get_logger(), "failed to set feature " << featureName(feature)
+                                                                             << " power to " << on_off);
     }
   }
   else
   {
     // This device does not support turning this feature on or off.
     // That's OK.
-    ROS_DEBUG_STREAM("no power control for feature " << featureName(feature));
+    RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "no power control for feature " << featureName(feature));
   }
 }
 

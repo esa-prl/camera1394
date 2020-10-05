@@ -76,7 +76,7 @@ namespace camera1394
 
     int open(camera1394::Camera1394Config &newconfig);
     int close();
-    bool readData(sensor_msgs::Image &image);
+    bool readData(sensor_msgs::msg::Image &image);
 
     /** check whether CameraInfo matches current video mode
      *
@@ -84,8 +84,8 @@ namespace camera1394
      *  @param ci CameraInfo message to check
      *  @return true if camera dimensions match calibration
      */
-    bool checkCameraInfo(const sensor_msgs::Image &image,
-                         const sensor_msgs::CameraInfo &ci)
+    bool checkCameraInfo(const sensor_msgs::msg::Image &image,
+                         const sensor_msgs::msg::CameraInfo &ci)
 
     {
       if (format7_.active())
@@ -102,7 +102,7 @@ namespace camera1394
      *    roi (region of interest)
      *    binning_x, binning_y
      */
-    void setOperationalParameters(sensor_msgs::CameraInfo &ci)
+    void setOperationalParameters(sensor_msgs::msg::CameraInfo &ci)
     {
       if (format7_.active())
         format7_.setOperationalParameters(ci);

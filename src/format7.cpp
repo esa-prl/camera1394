@@ -313,7 +313,7 @@ extern std::string bayer_string(dc1394color_filter_t pattern,
                                 unsigned int bits);
 
 /** Unpack Format7 data for an Image frame */
-void Format7::unpackData(sensor_msgs::Image &image, uint8_t *capture_buffer)
+void Format7::unpackData(sensor_msgs::msg::Image &image, uint8_t *capture_buffer)
 {
   int image_size;
   switch (coding_)
@@ -424,7 +424,7 @@ void Format7::unpackData(sensor_msgs::Image &image, uint8_t *capture_buffer)
  *    roi (region of interest)
  *    binning_x, binning_y
  */
-bool Format7::checkCameraInfo(const sensor_msgs::CameraInfo &cinfo)
+bool Format7::checkCameraInfo(const sensor_msgs::msg::CameraInfo &cinfo)
 {
   // see if the (full) image size matches the calibration
   if (cinfo.width == maxWidth_ && cinfo.height == maxHeight_)
@@ -459,7 +459,7 @@ bool Format7::checkCameraInfo(const sensor_msgs::CameraInfo &cinfo)
  *    roi (region of interest)
  *    binning_x, binning_y
  */
-void Format7::setOperationalParameters(sensor_msgs::CameraInfo &cinfo)
+void Format7::setOperationalParameters(sensor_msgs::msg::CameraInfo &cinfo)
 {
   // copy the operational data determined during start()
   cinfo.binning_x = binning_x_;
@@ -469,7 +469,7 @@ void Format7::setOperationalParameters(sensor_msgs::CameraInfo &cinfo)
   // set do_rectify depending on current calibration parameters
   cinfo.roi.do_rectify = false;
 
-  if (cinfo.K[0] == 0.0)
+  if (cinfo.k[0] == 0.0)
     return; // uncalibrated
 
   bool roiMatchesCalibration = (cinfo.width == roi_.width && cinfo.height == roi_.height);
