@@ -158,7 +158,7 @@ namespace Modes
             dc1394_format7_get_color_codings(camera, video_mode, &ccs);
         if (err != DC1394_SUCCESS)
         {
-          ROS_FATAL("unable to get supported color codings");
+          RCLCPP_FATAL(private_nh->get_logger(), "unable to get supported color codings");
           // TODO raise exception
           return (dc1394color_coding_t)0;
         }
@@ -171,14 +171,14 @@ namespace Modes
         }
 
         // requested mode not available, revert to current mode of camera
-        ROS_ERROR_STREAM("Color coding " << color_coding
-                                         << " not supported by this camera");
+        RCLCPP_ERROR_STREAM(private_nh->get_logger(), "Color coding " << color_coding
+                                                                      << " not supported by this camera");
         dc1394color_coding_t current_mode;
         err = dc1394_format7_get_color_coding(camera, video_mode,
                                               &current_mode);
         if (err != DC1394_SUCCESS)
         {
-          ROS_FATAL("unable to get current color coding");
+          RCLCPP_FATAL(private_nh->get_logger(), "unable to get current color coding");
           // TODO raise exception
           return (dc1394color_coding_t)0;
         }
@@ -193,7 +193,7 @@ namespace Modes
 
     // Requested color coding does not match any known string, set to
     // "mono8" and update parameter.
-    ROS_FATAL_STREAM("Unknown color_coding: " << color_coding);
+    RCLCPP_FATAL_STREAM(private_nh->get_logger(), "Unknown color_coding: " << color_coding);
     color_coding = colorCodingName(DC1394_COLOR_CODING_MONO8);
     return (dc1394color_coding_t)DC1394_COLOR_CODING_MONO8;
   }
@@ -221,7 +221,7 @@ namespace Modes
         dc1394_video_get_supported_framerates(camera, video_mode, &avail_rates);
     if (err != DC1394_SUCCESS)
     {
-      ROS_FATAL("getFrameRate() cannot be used for Format7 modes");
+      RCLCPP_FATAL(private_nh->get_logger(), "getFrameRate() cannot be used for Format7 modes");
       return (dc1394framerate_t)DC1394_FRAMERATE_NUM; // failure
     }
 
@@ -247,7 +247,7 @@ namespace Modes
     }
 
     // no valid frame rate discovered
-    ROS_ERROR("requested frame_rate (%.3f) not available", frame_rate);
+    RCLCPP_ERROR(private_nh->get_logger(), "requested frame_rate (%.3f) not available", frame_rate);
     return (dc1394framerate_t)DC1394_FRAMERATE_NUM; // failure
   }
 
@@ -275,7 +275,7 @@ namespace Modes
             dc1394_video_get_supported_modes(camera, &vmodes);
         if (err != DC1394_SUCCESS)
         {
-          ROS_FATAL("unable to get supported video modes");
+          RCLCPP_FATAL(private_nh->get_logger(), "unable to get supported video modes");
           // TODO raise exception
           return (dc1394video_mode_t)0;
         }
@@ -288,13 +288,13 @@ namespace Modes
         }
 
         // requested mode not available, revert to current mode of camera
-        ROS_ERROR_STREAM("Video mode " << video_mode
-                                       << " not supported by this camera");
+        RCLCPP_ERROR_STREAM(private_nh->get_logger(), "Video mode " << video_mode
+                                                                    << " not supported by this camera");
         dc1394video_mode_t current_mode;
         err = dc1394_video_get_mode(camera, &current_mode);
         if (err != DC1394_SUCCESS)
         {
-          ROS_FATAL("unable to get current video mode");
+          RCLCPP_FATAL(private_nh->get_logger(), "unable to get current video mode");
           // TODO raise exception
           return (dc1394video_mode_t)0;
         }
@@ -308,7 +308,7 @@ namespace Modes
     }
 
     // request video mode does not match any known string
-    ROS_FATAL_STREAM("Unknown video_mode:" << video_mode);
+    RCLCPP_FATAL_STREAM(private_nh->get_logger(), "Unknown video_mode:" << video_mode);
     ROS_BREAK();
     // TODO raise exception
     //CAM_EXCEPT(camera1394::Exception, "Unsupported video_mode");
@@ -331,7 +331,7 @@ namespace Modes
                     dc1394video_mode_t video_mode,
                     double &frame_rate)
   {
-    dc1394framerate_t rate = getFrameRate(camera, video_mode, frame_rate);
+    dc1394framerate_t rate = getFrameRate(private_nh, camera, video_mode, frame_rate);
     if (DC1394_FRAMERATE_NUM == rate)
     {
       RCLCPP_WARN(private_nh->get_logger(), "No valid frame rate");
