@@ -78,7 +78,8 @@ using namespace camera1394;
 // Constructor
 Camera1394::Camera1394(rclcpp::Node *private_nh)
     : private_nh_(private_nh),
-      camera_(NULL)
+      camera_(NULL),
+      format7_(Format7(private_nh))
 {
 }
 
@@ -298,7 +299,7 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
   }
 
   // first, set parameters that are common between Format7 and other modes
-  if (false == Modes::setIsoSpeed(camera_, newconfig.iso_speed))
+  if (false == Modes::setIsoSpeed(private_nh_, camera_, newconfig.iso_speed))
   {
     SafeCleanup();
     CAM_EXCEPT(camera1394::Exception,
@@ -307,7 +308,7 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
   }
 
   // set video mode
-  videoMode_ = Modes::getVideoMode(camera_, newconfig.video_mode);
+  videoMode_ = Modes::getVideoMode(private_nh_, camera_, newconfig.video_mode);
   if (DC1394_SUCCESS != dc1394_video_set_mode(camera_, videoMode_))
   {
     SafeCleanup();
@@ -335,7 +336,7 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
   {
     // Set frame rate and Bayer method (only valid for non-Format7 modes)
     DoBayerConversion_ = findBayerMethod(newconfig.bayer_method.c_str());
-    if (!Modes::setFrameRate(camera_, videoMode_, newconfig.frame_rate))
+    if (!Modes::setFrameRate(private_nh_, camera_, videoMode_, newconfig.frame_rate))
     {
       SafeCleanup();
       CAM_EXCEPT(camera1394::Exception, "Failed to set frame rate");
@@ -374,7 +375,7 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
   //////////////////////////////////////////////////////////////
 
   // TODO: pass newconfig here and eliminate initialize() method
-  features_.reset(new Features(camera_));
+  features_.reset(new Features(private_nh_, camera_));
 
   registers_.reset(new Registers(camera_));
 
