@@ -453,7 +453,12 @@ std::string bayer_string(dc1394color_filter_t pattern, unsigned int bits)
 /** Return an image frame */
 bool Camera1394::readData(sensor_msgs::msg::Image &image)
 {
-  ROS_ASSERT_MSG(camera_, "Attempt to read from camera that is not open.");
+  if (!camera_)
+  {
+    RCLCPP_FATAL(private_nh_->get_logger(), "Attempt to read from camera that is not open.");
+    abort();
+  }
+  // ROS_ASSERT_MSG(camera_, "Attempt to read from camera that is not open.");
 
   dc1394video_frame_t *frame = NULL;
   if (features_->isTriggerPowered())
