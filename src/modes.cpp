@@ -309,6 +309,7 @@ namespace Modes
 
     // request video mode does not match any known string
     RCLCPP_FATAL_STREAM(private_nh->get_logger(), "Unknown video_mode:" << video_mode);
+    // Removed since there is no replacement in ROS2 yet
     //ROS_BREAK();
     // TODO raise exception
     //CAM_EXCEPT(camera1394::Exception, "Unsupported video_mode");

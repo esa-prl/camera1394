@@ -410,6 +410,7 @@ void Format7::unpackData(sensor_msgs::msg::Image &image, uint8_t *capture_buffer
   default:
     RCLCPP_ERROR_STREAM(private_nh_->get_logger(), "Driver bug: unknown Format7 color coding:"
                                                        << coding_);
+    // Removed since there is no replacement in ROS2 yet
     // ROS_BREAK();
   }
 }
