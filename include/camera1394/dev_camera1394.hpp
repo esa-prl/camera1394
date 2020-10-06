@@ -43,6 +43,7 @@
 #define DEV_CAMERA1394_HPP_
 
 #include <dc1394/dc1394.h>
+#include <iomanip>
 
 // ROS includes
 #include <sensor_msgs/msg/image.hpp>
