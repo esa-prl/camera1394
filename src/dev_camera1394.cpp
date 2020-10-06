@@ -476,9 +476,9 @@ bool Camera1394::readData(sensor_msgs::msg::Image &image)
   uint8_t *capture_buffer;
 
   if (use_ros_time_)
-    image.header.stamp = ros::Time::now() + ros::Duration(time_offset_);
+    image.header.stamp = private_nh_->get_clock()->now() + rclcpp::Duration(time_offset_);
   else
-    image.header.stamp = ros::Time((double)frame->timestamp / 1000000.0);
+    image.header.stamp = rclcpp::Time((double)frame->timestamp / 1000000.0);
 
   dc1394video_frame_t frame2;
 

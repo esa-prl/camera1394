@@ -44,11 +44,11 @@ namespace camera1394
         // Default: False
         bool reset_on_open = false;
 
-        // Timestamp Image and CameraInfo using ros::Time::now()
+        // Timestamp Image and CameraInfo using rclcpp::Clock::now()
         // Default: False
         bool use_ros_time = false;
 
-        // Offset to add to ros::Time::now()
+        // Offset in seconds to add to rclcpp::Clock::now()
         // Default: 0.0 Min: -5.0 Max: 1.0
         double time_offset = 0.0;
 
