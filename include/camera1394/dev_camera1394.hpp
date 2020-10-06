@@ -109,8 +109,8 @@ namespace camera1394
     }
 
     std::string device_id_;
-    boost::shared_ptr<Features> features_;
-    boost::shared_ptr<Registers> registers_;
+    std::shared_ptr<Features> features_;
+    std::shared_ptr<Registers> registers_;
 
   private:
     // private data
