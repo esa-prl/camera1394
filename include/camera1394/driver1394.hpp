@@ -46,8 +46,8 @@
 
 #include "camera1394/dev_camera1394.hpp"
 #include "camera1394/camera1394_config.hpp"
-#include "camera1394/GetCameraRegisters.h"
-#include "camera1394/SetCameraRegisters.h"
+// #include "camera1394/GetCameraRegisters.h"
+// #include "camera1394/SetCameraRegisters.h"
 
 typedef camera1394::Camera1394Config Config;
 
@@ -80,8 +80,8 @@ namespace camera1394_driver
         static const uint8_t RUNNING = 2; // Streaming images
 
         // public methods
-        Camera1394Driver(ros::NodeHandle priv_nh,
-                         ros::NodeHandle camera_nh);
+        Camera1394Driver(rclcpp::Node *private_nh);
+
         ~Camera1394Driver();
         void poll(void);
         void setup(void);
@@ -91,8 +91,8 @@ namespace camera1394_driver
         // private methods
         void closeCamera();
         bool openCamera(Config &newconfig);
-        void publish(const sensor_msgs::ImagePtr &image);
-        bool read(sensor_msgs::ImagePtr &image);
+        void publish(const sensor_msgs::msg::ImagePtr &image);
+        bool read(sensor_msgs::msg::ImagePtr &image);
         void reconfig(camera1394::Camera1394Config &newconfig, uint32_t level);
 
         bool getCameraRegisters(camera1394::GetCameraRegisters::Request &request,
@@ -106,25 +106,24 @@ namespace camera1394_driver
         /** driver state variables */
         volatile uint8_t state_;           // current driver state
         volatile bool reconfiguring_;      // true when reconfig() running
-        ros::NodeHandle priv_nh_;          // private node handle
-        ros::NodeHandle camera_nh_;        // camera name space handle
+        rclcpp::Node *private_nh_;         // private node handle
         std::string camera_name_;          // camera name
-        ros::Rate cycle_;                  // polling rate when closed
+        rclcpp::Rate cycle_;               // polling rate when closed
         uint32_t retries_;                 // count of openCamera() retries
         uint32_t consecutive_read_errors_; // number of consecutive read errors
 
         /** libdc1394 camera device interface */
-        boost::shared_ptr<camera1394::Camera1394> dev_;
+        std::shared_ptr<camera1394::Camera1394> dev_;
 
         /** dynamic parameter configuration */
         camera1394::Camera1394Config config_;
 
         /** camera calibration information */
-        boost::shared_ptr<camera_info_manager::CameraInfoManager> cinfo_;
+        std::shared_ptr<camera_info_manager::CameraInfoManager> cinfo_;
         bool calibration_matches_; // CameraInfo matches video mode
 
         /** image transport interfaces */
-        boost::shared_ptr<image_transport::ImageTransport> it_;
+        std::shared_ptr<image_transport::ImageTransport> it_;
         image_transport::CameraPublisher image_pub_;
 
         /** services for getting/setting camera control and status registers (CSR) */

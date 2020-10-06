@@ -34,7 +34,7 @@
 
 #include <boost/format.hpp>
 
-#include <tf/transform_listener.h>
+#include <tf2_ros/transform_listener.h>
 
 #include "camera1394/driver1394.hpp"
 #include "camera1394/camera1394_config.hpp"
@@ -64,33 +64,31 @@ namespace camera1394_driver
     typedef camera1394::Camera1394Config Config;
     typedef Camera1394Driver Driver;
 
-    Camera1394Driver::Camera1394Driver(ros::NodeHandle priv_nh,
-                                       ros::NodeHandle camera_nh) : state_(Driver::CLOSED),
-                                                                    reconfiguring_(false),
-                                                                    priv_nh_(priv_nh),
-                                                                    camera_nh_(camera_nh),
-                                                                    camera_name_("camera"),
-                                                                    cycle_(1.0), // slow poll when closed
-                                                                    retries_(0),
-                                                                    consecutive_read_errors_(0),
-                                                                    dev_(new camera1394::Camera1394()),
-                                                                    cinfo_(new camera_info_manager::CameraInfoManager(camera_nh_)),
-                                                                    calibration_matches_(true),
-                                                                    it_(new image_transport::ImageTransport(camera_nh_)),
-                                                                    image_pub_(it_->advertiseCamera("image_raw", 1)),
-                                                                    get_camera_registers_srv_(camera_nh_.advertiseService(
-                                                                        "get_camera_registers",
-                                                                        &Camera1394Driver::getCameraRegisters, this)),
-                                                                    set_camera_registers_srv_(camera_nh_.advertiseService(
-                                                                        "set_camera_registers",
-                                                                        &Camera1394Driver::setCameraRegisters, this)),
-                                                                    diagnostics_(),
-                                                                    topic_diagnostics_min_freq_(0.),
-                                                                    topic_diagnostics_max_freq_(1000.),
-                                                                    topic_diagnostics_("image_raw", diagnostics_,
-                                                                                       diagnostic_updater::FrequencyStatusParam(&topic_diagnostics_min_freq_,
-                                                                                                                                &topic_diagnostics_max_freq_, 0.1, 10),
-                                                                                       diagnostic_updater::TimeStampStatusParam())
+    Camera1394Driver::Camera1394Driver(rclcpp::Node *private_nh) : private_nh_(private_nh),
+                                                                   state_(Driver::CLOSED),
+                                                                   reconfiguring_(false),
+                                                                   camera_name_("camera"),
+                                                                   cycle_(1.0), // slow poll when closed
+                                                                   retries_(0),
+                                                                   consecutive_read_errors_(0),
+                                                                   dev_(new camera1394::Camera1394(private_nh)),
+                                                                   cinfo_(new camera_info_manager::CameraInfoManager(private_nh)),
+                                                                   calibration_matches_(true),
+                                                                   it_(new image_transport::ImageTransport(private_nh)),
+                                                                   image_pub_(it_->advertiseCamera("image_raw", 1)),
+                                                                   get_camera_registers_srv_(private_nh_.advertiseService(
+                                                                       "get_camera_registers",
+                                                                       &Camera1394Driver::getCameraRegisters, this)),
+                                                                   set_camera_registers_srv_(private_nh_.advertiseService(
+                                                                       "set_camera_registers",
+                                                                       &Camera1394Driver::setCameraRegisters, this)),
+                                                                   diagnostics_(),
+                                                                   topic_diagnostics_min_freq_(0.),
+                                                                   topic_diagnostics_max_freq_(1000.),
+                                                                   topic_diagnostics_("image_raw", diagnostics_,
+                                                                                      diagnostic_updater::FrequencyStatusParam(&topic_diagnostics_min_freq_,
+                                                                                                                               &topic_diagnostics_max_freq_, 0.1, 10),
+                                                                                      diagnostic_updater::TimeStampStatusParam())
     {
     }
 
@@ -321,6 +319,7 @@ namespace camera1394_driver
         // resolve frame ID using tf_prefix parameter
         if (newconfig.frame_id == "")
             newconfig.frame_id = "camera";
+
         std::string tf_prefix = tf::getPrefixParam(priv_nh_);
         RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "tf_prefix: " << tf_prefix);
         newconfig.frame_id = tf::resolve(tf_prefix, newconfig.frame_id);
