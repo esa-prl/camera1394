@@ -129,6 +129,6 @@ namespace camera1394
     void findBayerPattern(const char *);
     bool findBayerMethod(const char *);
   };
-}; // namespace camera1394
+} // namespace camera1394
 
 #endif // DEV_CAMERA1394_HPP_

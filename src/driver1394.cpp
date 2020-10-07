@@ -38,6 +38,7 @@
 #include "camera1394/camera1394_config.hpp"
 #include "camera1394/features.hpp"
 
+using namespace std::placeholders;
 /** @file
 
 @brief ROS driver for IIDC-compatible IEEE 1394 digital cameras.
@@ -74,14 +75,14 @@ namespace camera1394_driver
                                                                    calibration_matches_(true),
                                                                    //    it_(new image_transport::ImageTransport(private_nh)),
                                                                    image_pub_(it_->advertiseCamera("image_raw", 1)),
-                                                                   //    get_camera_registers_srv_(
-                                                                   //        private_nh->create_service<camera1394::srv::GetCameraRegisters>(
-                                                                   //            "get_camera_registers",
-                                                                   //            &Camera1394Driver::getCameraRegisters)),
-                                                                   //    set_camera_registers_srv_(
-                                                                   //        private_nh->create_service<camera1394::srv::SetCameraRegisters>(
-                                                                   //            "set_camera_registers",
-                                                                   //            &Camera1394Driver::setCameraRegisters)),
+                                                                   get_camera_registers_srv_(
+                                                                       private_nh->create_service<camera1394::srv::GetCameraRegisters>(
+                                                                           "get_camera_registers",
+                                                                           std::bind(&Camera1394Driver::getCameraRegisters, this, _1, _2))),
+                                                                   set_camera_registers_srv_(
+                                                                       private_nh->create_service<camera1394::srv::SetCameraRegisters>(
+                                                                           "set_camera_registers",
+                                                                           std::bind(&Camera1394Driver::setCameraRegisters, this, _1, _2))),
                                                                    diagnostics_(private_nh),
                                                                    topic_diagnostics_min_freq_(0.),
                                                                    topic_diagnostics_max_freq_(1000.),
@@ -97,6 +98,9 @@ namespace camera1394_driver
     {
     }
 
+    void Camera1394Driver::initServices()
+    {
+    }
     /** Close camera device
    *
    *  postcondition: state_ is Driver::CLOSED
