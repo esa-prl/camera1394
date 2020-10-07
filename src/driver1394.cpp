@@ -197,7 +197,7 @@ namespace camera1394_driver
             if (!do_sleep) // openCamera() succeeded?
             {
                 // driver is open, read the next image still holding lock
-                sensor_msgs::ImagePtr image(new sensor_msgs::Image);
+                std::shared_ptr<sensor_msgs::msg::Image> image = std::make_shared<sensor_msgs::msg::Image>();
                 if (read(image))
                 {
                     publish(image);
@@ -213,7 +213,7 @@ namespace camera1394_driver
         } // release mutex lock
 
         // Always run the diagnostics updater: no lock required.
-        diagnostics_.update();
+        diagnostics_.force_update();
 
         if (do_sleep)
         {
@@ -227,13 +227,13 @@ namespace camera1394_driver
    *
    *  @param image points to latest camera frame
    */
-    void Camera1394Driver::publish(const sensor_msgs::ImagePtr &image)
+    void Camera1394Driver::publish(sensor_msgs::msg::Image::SharedPtr image)
     {
         image->header.frame_id = config_.frame_id;
 
         // get current CameraInfo data
-        sensor_msgs::CameraInfoPtr
-            ci(new sensor_msgs::CameraInfo(cinfo_->getCameraInfo()));
+        sensor_msgs::msg::CameraInfo::SharedPtr
+            ci(new sensor_msgs::msg::CameraInfo(cinfo_->getCameraInfo()));
 
         // check whether CameraInfo matches current video mode
         if (!dev_->checkCameraInfo(*image, *ci))
@@ -248,7 +248,7 @@ namespace camera1394_driver
                                                                   << "] calibration does not match video mode "
                                                                   << "(publishing uncalibrated data)");
             }
-            ci.reset(new sensor_msgs::CameraInfo());
+            ci.reset(new sensor_msgs::msg::CameraInfo());
             ci->height = image->height;
             ci->width = image->width;
         }
@@ -280,7 +280,7 @@ namespace camera1394_driver
    * @param image points to camera Image message
    * @return true if successful, with image filled in
    */
-    bool Camera1394Driver::read(sensor_msgs::ImagePtr &image)
+    bool Camera1394Driver::read(std::shared_ptr<sensor_msgs::msg::Image> image)
     {
         bool success = true;
         try

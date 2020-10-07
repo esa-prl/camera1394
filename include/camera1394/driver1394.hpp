@@ -91,8 +91,8 @@ namespace camera1394_driver
         // private methods
         void closeCamera();
         bool openCamera(Config &newconfig);
-        void publish(const sensor_msgs::msg::ImagePtr &image);
-        bool read(sensor_msgs::msg::ImagePtr &image);
+        void publish(sensor_msgs::msg::Image::SharedPtr image);
+        bool read(sensor_msgs::msg::Image::SharedPtr image);
         void reconfig(camera1394::Camera1394Config &newconfig, uint32_t level);
 
         bool getCameraRegisters(camera1394::GetCameraRegisters::Request &request,
