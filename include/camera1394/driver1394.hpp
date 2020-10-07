@@ -38,16 +38,16 @@
 #include <boost/thread/mutex.hpp>
 
 #include <rclcpp/rclcpp.hpp>
-#include <camera_info_manager/camera_info_manager.h>
+#include <camera_info_manager/camera_info_manager.hpp>
 #include <diagnostic_updater/diagnostic_updater.hpp>
 #include <diagnostic_updater/publisher.hpp>
-#include <image_transport/image_transport.h>
+#include <image_transport/image_transport.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 
 #include "camera1394/dev_camera1394.hpp"
 #include "camera1394/camera1394_config.hpp"
-// #include "camera1394/GetCameraRegisters.h"
-// #include "camera1394/SetCameraRegisters.h"
+#include "camera1394/srv/get_camera_registers.hpp"
+#include "camera1394/srv/set_camera_registers.hpp"
 
 typedef camera1394::Camera1394Config Config;
 
@@ -95,10 +95,10 @@ namespace camera1394_driver
         bool read(sensor_msgs::msg::Image::SharedPtr image);
         void reconfig(camera1394::Camera1394Config &newconfig, uint32_t level);
 
-        bool getCameraRegisters(camera1394::GetCameraRegisters::Request &request,
-                                camera1394::GetCameraRegisters::Response &response);
-        bool setCameraRegisters(camera1394::SetCameraRegisters::Request &request,
-                                camera1394::SetCameraRegisters::Response &response);
+        bool getCameraRegisters(const std::shared_ptr<camera1394::srv::GetCameraRegisters::Request> request,
+                                std::shared_ptr<camera1394::srv::GetCameraRegisters::Response> response);
+        bool setCameraRegisters(const std::shared_ptr<camera1394::srv::SetCameraRegisters::Request> request,
+                                std::shared_ptr<camera1394::srv::SetCameraRegisters::Response> response);
 
         /** Non-recursive mutex for serializing callbacks with device polling. */
         boost::mutex mutex_;
@@ -127,8 +127,10 @@ namespace camera1394_driver
         image_transport::CameraPublisher image_pub_;
 
         /** services for getting/setting camera control and status registers (CSR) */
-        ros::ServiceServer get_camera_registers_srv_;
-        ros::ServiceServer set_camera_registers_srv_;
+        rclcpp::Service<camera1394::srv::GetCameraRegisters>::SharedPtr get_camera_registers_srv_;
+        rclcpp::Service<camera1394::srv::SetCameraRegisters>::SharedPtr set_camera_registers_srv_;
+        // ros::ServiceServer get_camera_registers_srv_;
+        // ros::ServiceServer set_camera_registers_srv_;
 
         /** diagnostics updater */
         diagnostic_updater::Updater diagnostics_;
@@ -138,4 +140,4 @@ namespace camera1394_driver
 
     }; // end class Camera1394Driver
 
-}; // end namespace camera1394_driver
+} // end namespace camera1394_driver

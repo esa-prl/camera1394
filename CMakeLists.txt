@@ -14,15 +14,23 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(diagnostic_updater REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
 include_directories(include)
 
 set(dependencies
   "rclcpp")
 
-# add executable
-# add_executable(camera1394_node src/camera1394_node.cpp)
-# ament_target_dependencies(camera1394_node ${dependencies})
+set(srv_files
+  "srv/GetCameraRegisters.srv"
+  "srv/SetCameraRegisters.srv"
+)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${srv_files}
+)
+ament_export_dependencies(rosidl_default_runtime)
+
 
 # add executable
 set(NODE_NAME "camera1394_node")
@@ -33,5 +41,8 @@ ament_target_dependencies(${NODE_NAME} ${dependencies})
 install(TARGETS
   camera1394_node 
   DESTINATION lib/${PROJECT_NAME})
+
+rosidl_target_interfaces(camera1394_node
+  ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 ament_package()

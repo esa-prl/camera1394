@@ -5,6 +5,22 @@
 #include <string>
 namespace camera1394
 {
+    // Feature control states
+    enum FeatureControlStates
+    {
+        // Use fixed value
+        Camera1394_Off,
+        // Query current values
+        Camera1394_Query,
+        // Camera sets continously
+        Camera1394_Auto,
+        // Use explicit value
+        Camera1394_Manual,
+        // Camera sets onces
+        Camera1394_OnePush,
+        // Feature not available
+        Camera1394_None
+    };
     struct Camera1394Config
     {
         // Global Unique ID of camera, 16 hex digits (use first camera if null).
@@ -266,21 +282,5 @@ namespace camera1394
         double zoom = 0.0;
     };
 
-    // Feature control states
-    enum FeatureControlStates
-    {
-        // Use fixed value
-        Camera1394_Off,
-        // Query current values
-        Camera1394_Query,
-        // Camera sets continously
-        Camera1394_Auto,
-        // Use explicit value
-        Camera1394_Manual,
-        // Camera sets onces
-        Camera1394_OnePush,
-        // Feature not available
-        Camera1394_None
-    };
 } // namespace camera1394
 #endif
