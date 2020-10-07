@@ -73,8 +73,7 @@ namespace camera1394_driver
                                                                    dev_(new camera1394::Camera1394(private_nh)),
                                                                    cinfo_(new camera_info_manager::CameraInfoManager(private_nh)),
                                                                    calibration_matches_(true),
-                                                                   //    it_(new image_transport::ImageTransport(private_nh)),
-                                                                   image_pub_(it_->advertiseCamera("image_raw", 1)),
+                                                                   image_pub_(image_transport::create_camera_publisher(private_nh, "image_raw")),
                                                                    get_camera_registers_srv_(
                                                                        private_nh->create_service<camera1394::srv::GetCameraRegisters>(
                                                                            "get_camera_registers",

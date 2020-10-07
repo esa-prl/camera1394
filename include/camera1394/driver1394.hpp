@@ -124,7 +124,6 @@ namespace camera1394_driver
         bool calibration_matches_; // CameraInfo matches video mode
 
         /** image transport interfaces */
-        std::shared_ptr<image_transport::ImageTransport> it_;
         image_transport::CameraPublisher image_pub_;
 
         /** services for getting/setting camera control and status registers (CSR) */
