@@ -34,8 +34,6 @@
 
 #include <boost/format.hpp>
 
-#include <tf2_ros/transform_listener.h>
-
 #include "camera1394/driver1394.hpp"
 #include "camera1394/camera1394_config.hpp"
 #include "camera1394/features.hpp"
@@ -319,10 +317,6 @@ namespace camera1394_driver
         // resolve frame ID using tf_prefix parameter
         if (newconfig.frame_id == "")
             newconfig.frame_id = "camera";
-
-        std::string tf_prefix = tf::getPrefixParam(priv_nh_);
-        RCLCPP_DEBUG_STREAM(private_nh_->get_logger(), "tf_prefix: " << tf_prefix);
-        newconfig.frame_id = tf::resolve(tf_prefix, newconfig.frame_id);
 
         if (state_ != Driver::CLOSED && (level & Levels::RECONFIGURE_CLOSE))
         {
