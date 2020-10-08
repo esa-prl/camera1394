@@ -3,7 +3,9 @@
 Camera1394Node::Camera1394Node()
     : Node("Camera1394Node")
 {
+
     initialize_parameters();
+
     RCLCPP_INFO(this->get_logger(), "%s initialized", this->get_name());
 }
 
@@ -11,7 +13,7 @@ Camera1394Node::~Camera1394Node()
 {
 }
 
-/** Helper funcion to declare and get parameters
+/** Helper function to declare and get parameters
  * @param desc ParameterDescripor
  * @param default_value Default value of parameter if not changed
  * @param out_value Actual value of parameter
@@ -23,7 +25,7 @@ void Camera1394Node::declare_and_get_parameter(
     T &out_value,
     std::string log_info)
 {
-    declare_parameter(desc.name, rclcpp::ParameterValue(default_value));
+    declare_parameter(desc.name, rclcpp::ParameterValue(default_value), desc);
 
     if (!get_parameter(desc.name, out_value))
     {
@@ -42,29 +44,25 @@ void Camera1394Node::initialize_parameters()
     {
         auto descriptor = rcl_interfaces::msg::ParameterDescriptor();
         descriptor.name =
-            "general.guid";
+            "guid";
         descriptor.description =
-            "Global Unique ID of camera, 16 hex digits (use first camera if null";
-        descriptor.additional_constraints =
-            "";
+            "Global Unique ID of camera, 16 hex digits (use first camera if null).\n  Default: ";
         declare_and_get_parameter(descriptor, config_.guid, config_.guid, "* GUID: ");
     }
     {
         auto descriptor = rcl_interfaces::msg::ParameterDescriptor();
         descriptor.name =
-            "general.video_mode";
+            "video_mode";
         descriptor.description =
-            "IIDC video mode.";
-        descriptor.additional_constraints =
-            "";
+            "IIDC video mode.\n  Default: 640x480_mono8";
         declare_and_get_parameter(descriptor, config_.video_mode, config_.video_mode, "* IIDC video mode: ");
     }
     {
         auto descriptor = rcl_interfaces::msg::ParameterDescriptor();
         descriptor.name =
-            "general.frame_id";
+            "frame_id";
         descriptor.description =
-            "ROS tf frame of reference, resolved with tf_prefix unless absolute.";
+            "ROS tf frame of reference, resolved with tf_prefix unless absolute.\n  Default: camera";
         descriptor.additional_constraints =
             "";
         declare_and_get_parameter(descriptor, config_.frame_id, config_.frame_id, "* Frame ID: ");
@@ -72,11 +70,9 @@ void Camera1394Node::initialize_parameters()
     {
         auto descriptor = rcl_interfaces::msg::ParameterDescriptor();
         descriptor.name =
-            "general.frame_rate";
+            "frame_rate";
         descriptor.description =
-            "Camera speed (frames per second)";
-        descriptor.additional_constraints =
-            "Min: 1.875 Max: 240.0";
+            "Camera speed (frames per second). \n  Default: 15.0";
         descriptor.floating_point_range.resize(1);
         auto &floating_point_range = descriptor.floating_point_range.at(0);
         floating_point_range.from_value = 1.875;
