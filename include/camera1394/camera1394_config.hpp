@@ -21,6 +21,7 @@ namespace camera1394
         // Feature not available
         Camera1394_None
     };
+
     struct Camera1394Config
     {
         // Global Unique ID of camera, 16 hex digits (use first camera if null).
@@ -29,6 +30,38 @@ namespace camera1394
 
         // IIDC video mode.
         // Default: 640x480_mono8
+        // Constraints:
+        // 160x120_yuv444
+        // 320x240_yuv422
+        // 640x480_yuv411
+        // 640x480_yuv422
+        // 640x480_rgb8
+        // 640x480_mono8
+        // 640x480_mono16
+        // 800x600_yuv422
+        // 800x600_rgb8
+        // 800x600_mono8
+        // 800x600_mono16
+        // 1024x768_yuv422
+        // 1024x768_rgb8
+        // 1024x768_mono8
+        // 1024x768_mono16
+        // 1280x960_yuv422
+        // 1280x960_rgb8
+        // 1280x960_mono8
+        // 1280x960_mono16
+        // 1600x1200_yuv422
+        // 1600x1200_rgb8
+        // 1600x1200_mono8
+        // 1600x1200_mono16
+        // format7_mode0
+        // format7_mode1
+        // format7_mode2
+        // format7_mode3
+        // format7_mode4
+        // format7_mode5
+        // format7_mode6
+        // format7_mode7
         std::string video_mode = "640x480_mono8";
 
         // ROS tf frame of reference, resolved with tf_prefix unless absolute.
