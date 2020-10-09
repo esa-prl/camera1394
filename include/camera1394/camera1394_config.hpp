@@ -74,7 +74,7 @@ namespace camera1394
 
         // Max number of consecutive read errors before attempting reconnection (0 to disable).
         // Default: 0 Min: 0 Max: 1000
-        int max_consecutive_errors;
+        int max_consecutive_errors = 0;
 
         // Total IEEE 1394 bus bandwidth (Megabits/second).
         // Default: 400 Min: 100 Max: 3200
@@ -93,7 +93,7 @@ namespace camera1394
         // Default: False
         bool reset_on_open = false;
 
-        // Timestamp Image and CameraInfo using rclcpp::Clock::now()
+        // Timestamp for Image and CameraInfo using rclcpp::Clock::now()
         // Default: False
         bool use_ros_time = false;
 
@@ -141,8 +141,8 @@ namespace camera1394
         //// Bayer color filter parameters
 
         // Bayer color encoding pattern
-        // Default: "" (No Bayer encoding)
-        // Constraints: "", rggb, gbrg, grbg, bggr
+        // Default: none (No Bayer encoding)
+        // Constraints: none, rggb, gbrg, grbg, bggr
         std::string bayer_pattern = "";
 
         // Bayer decoding method
