@@ -3,6 +3,7 @@
 #define CAMERA1394_CONFIG_HPP_
 
 #include <string>
+#include <set>
 namespace camera1394
 {
     // Feature control states
@@ -22,6 +23,99 @@ namespace camera1394
         Camera1394_None
     };
 
+    // Video modes for camera
+    const std::set<std::string> video_modes = {
+        "160x120_yuv444",
+        "640x480_yuv411",
+        "320x240_yuv422",
+        "640x480_yuv422",
+        "640x480_rgb8",
+        "640x480_mono8",
+        "640x480_mono16",
+        "800x600_yuv422",
+        "800x600_rgb8",
+        "800x600_mono8",
+        "800x600_mono16",
+        "1024x768_yuv422",
+        "1024x768_rgb8",
+        "1024x768_mono8",
+        "1024x768_mono16",
+        "1280x960_yuv422",
+        "1280x960_rgb8",
+        "1280x960_mono8",
+        "1280x960_mono16",
+        "1600x1200_yuv422",
+        "1600x1200_rgb8",
+        "1600x1200_mono8",
+        "1600x1200_mono16",
+        "format7_mode0",
+        "format7_mode1",
+        "format7_mode2",
+        "format7_mode3",
+        "format7_mode4",
+        "format7_mode5",
+        "format7_mode6",
+        "format7_mode7",
+    };
+
+    // Format7 color codings
+    const std::set<std::string> format7_color_codings = {
+        "mono8",
+        "mono16",
+        "mono16s",
+        "raw8",
+        "raw16",
+        "rgb8",
+        "rgb16",
+        "rgb16s",
+        "yuv411",
+        "yuv422",
+        "yuv444"};
+
+    // Bayer color encoding patterns
+    const std::set<std::string> bayer_patterns = {
+        "",
+        "rggb",
+        "gbrg",
+        "grbg",
+        "bggr"};
+
+    // Bayer decoding methods
+    const std::set<std::string> bayer_methods = {
+        "",
+        "DownSample",
+        "Simple",
+        "Bilinear",
+        "HQ",
+        "VNG",
+        "AHD"};
+
+    // External trigger modes
+    const std::set<std::string> trigger_modes = {
+        "mode_0",  // Exposure starts with a falling edge and stops when the the exposure specified by the SHUTTER feature is elapsed
+        "mode_1",  // Exposure starts with a falling edge and stops with the next rising edge
+        "mode_2",  // The camera starts the exposure at the first falling edge and stops the integration at the nth falling edge
+        "mode_3",  // This is an internal trigger mode. The trigger is generated every n*(period of fastest framerate)
+        "mode_4",  // A multiple exposure mode. N exposures are performed each time a falling edge is observed on the trigger signal. Each exposure is as long as defined by the SHUTTER feature
+        "mode_5",  // Same as Mode 4 except that the exposure is is defined by the length of the trigger pulse instead of the SHUTTER feature
+        "mode_14", // Vendor specified trigger mode
+        "mode_15"  // Vendor specified trigger mode
+    };
+
+    // External trigger sources
+    const std::set<std::string> trigger_sources = {
+        "source_0",
+        "source_1",
+        "source_2",
+        "source_3",
+        "source_software"};
+
+    // Trigger polarities
+    const std::set<std::string> trigger_polarities = {
+        "active_low",
+        "active_high"};
+
+    // Variables for all camera1394 parameters
     struct Camera1394Config
     {
         // Global Unique ID of camera, 16 hex digits (use first camera if null).
@@ -313,7 +407,7 @@ namespace camera1394
         // Zoom control
         // Default: 0.0 Min: 0.0 Max: 4095.0
         double zoom = 0.0;
-    };
+    }; // namespace camera1394
 
 } // namespace camera1394
 #endif
