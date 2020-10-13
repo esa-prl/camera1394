@@ -97,9 +97,6 @@ namespace camera1394_driver
     {
     }
 
-    void Camera1394Driver::initServices()
-    {
-    }
     /** Close camera device
    *
    *  postcondition: state_ is Driver::CLOSED

@@ -89,7 +89,6 @@ namespace camera1394_driver
 
     private:
         // private methods
-        void initServices();
         void closeCamera();
         bool openCamera(Config &newconfig);
         void publish(sensor_msgs::msg::Image::SharedPtr image);
