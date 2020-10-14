@@ -1,7 +1,8 @@
 #include "camera1394/camera1394_node.hpp"
 
 Camera1394Node::Camera1394Node()
-    : Node("Camera1394Node")
+    : Node("Camera1394Node"),
+      driver_(this)
 {
 
     initialize_parameters();

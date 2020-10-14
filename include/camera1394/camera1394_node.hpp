@@ -5,13 +5,13 @@
 #include <rclcpp/rclcpp.hpp>
 #include <string>
 #include "camera1394/camera1394_config.hpp"
+#include "camera1394/driver1394.hpp"
 
 class Camera1394Node : public rclcpp::Node
 {
 public:
     Camera1394Node();
     ~Camera1394Node();
-
     OnSetParametersCallbackHandle::SharedPtr callback_handler;
 
 protected:
@@ -35,5 +35,6 @@ protected:
 
 private:
     camera1394::Camera1394Config config_;
+    camera1394_driver::Camera1394Driver driver_;
 };
 #endif
