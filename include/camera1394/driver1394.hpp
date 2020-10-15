@@ -86,6 +86,7 @@ namespace camera1394_driver
         void poll(void);
         void setup(void);
         void shutdown(void);
+        void reconfig(camera1394::Camera1394Config &newconfig, uint32_t level);
 
     private:
         // private methods
@@ -93,7 +94,6 @@ namespace camera1394_driver
         bool openCamera(Config &newconfig);
         void publish(sensor_msgs::msg::Image::SharedPtr image);
         bool read(sensor_msgs::msg::Image::SharedPtr image);
-        void reconfig(camera1394::Camera1394Config &newconfig, uint32_t level);
 
         bool getCameraRegisters(const std::shared_ptr<camera1394::srv::GetCameraRegisters::Request> request,
                                 std::shared_ptr<camera1394::srv::GetCameraRegisters::Response> response);
