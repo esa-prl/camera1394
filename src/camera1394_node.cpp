@@ -771,7 +771,6 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
         if (parameter.get_name() == "guid")
         {
             change_parameter(parameter, rclcpp::PARAMETER_STRING, config_.guid, result);
-            return result;
         }
         else if (parameter.get_name() == "video_mode")
         {
@@ -786,87 +785,70 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-            return result;
         }
         else if (parameter.get_name() == "frame_id")
         {
             change_parameter(parameter, rclcpp::PARAMETER_STRING, config_.frame_id, result);
-            return result;
         }
         else if (parameter.get_name() == "frame_rate")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.frame_rate, result);
-            return result;
         }
         else if (parameter.get_name() == "max_consecutive_errors")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.max_consecutive_errors, result);
-            return result;
         }
         else if (parameter.get_name() == "iso_speed")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.iso_speed, result);
-            return result;
         }
         else if (parameter.get_name() == "num_dma_buffers")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.num_dma_buffers, result);
-            return result;
         }
         else if (parameter.get_name() == "camera_info_url")
         {
             change_parameter(parameter, rclcpp::PARAMETER_STRING, config_.camera_info_url, result);
-            return result;
         }
         else if (parameter.get_name() == "reset_on_open")
         {
             change_parameter(parameter, rclcpp::PARAMETER_BOOL, config_.reset_on_open, result);
-            return result;
         }
         else if (parameter.get_name() == "use_ros_time")
         {
             change_parameter(parameter, rclcpp::PARAMETER_BOOL, config_.use_ros_time, result);
-            return result;
         }
         else if (parameter.get_name() == "time_offset")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.time_offset, result);
-            return result;
         }
         else if (parameter.get_name() == "binning_x")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.binning_x, result);
-            return result;
         }
         else if (parameter.get_name() == "binning_y")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.binning_y, result);
-            return result;
         }
         else if (parameter.get_name() == "roi_width")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.roi_width, result);
-            return result;
         }
         else if (parameter.get_name() == "roi_height")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.roi_height, result);
-            return result;
         }
         else if (parameter.get_name() == "x_offset")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.x_offset, result);
-            return result;
         }
         else if (parameter.get_name() == "y_offset")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.y_offset, result);
-            return result;
         }
         else if (parameter.get_name() == "format7_packet_size")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.format7_packet_size, result);
-            return result;
         }
         else if (parameter.get_name() == "format7_color_coding")
         {
@@ -881,7 +863,6 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-            return result;
         }
         else if (parameter.get_name() == "bayer_pattern")
         {
@@ -896,7 +877,6 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-            return result;
         }
         else if (parameter.get_name() == "bayer_method")
         {
@@ -911,128 +891,102 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-
-            return result;
         }
         else if (parameter.get_name() == "auto_brightness")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_brightness, result);
-            return result;
         }
         else if (parameter.get_name() == "brightness")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.brightness, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_exposure")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_exposure, result);
-            return result;
         }
         else if (parameter.get_name() == "exposure")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.exposure, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_focus")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_focus, result);
-            return result;
         }
         else if (parameter.get_name() == "focus")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.focus, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_gain")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_gain, result);
-            return result;
         }
         else if (parameter.get_name() == "gain")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.gain, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_gamma")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_gamma, result);
-            return result;
         }
         else if (parameter.get_name() == "gamma")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.gamma, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_hue")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_hue, result);
-            return result;
         }
         else if (parameter.get_name() == "hue")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.hue, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_iris")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_iris, result);
-            return result;
         }
         else if (parameter.get_name() == "iris")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.iris, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_pan ")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_pan, result);
-            return result;
         }
         else if (parameter.get_name() == "pan")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.pan, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_saturation")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_saturation, result);
-            return result;
         }
         else if (parameter.get_name() == "saturation")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.saturation, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_sharpness")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_sharpness, result);
-            return result;
         }
         else if (parameter.get_name() == "sharpness")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.sharpness, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_shutter")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_shutter, result);
-            return result;
         }
         else if (parameter.get_name() == "shutter")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.shutter, result);
-            return result;
         }
         else if (parameter.get_name() == "external_trigger")
         {
             change_parameter(parameter, rclcpp::PARAMETER_BOOL, config_.external_trigger, result);
-            return result;
         }
         else if (parameter.get_name() == "software_trigger")
         {
             change_parameter(parameter, rclcpp::PARAMETER_BOOL, config_.software_trigger, result);
-            return result;
         }
         else if (parameter.get_name() == "trigger_mode")
         {
@@ -1047,7 +1001,6 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-            return result;
         }
         else if (parameter.get_name() == "trigger_source")
         {
@@ -1062,7 +1015,6 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-            return result;
         }
         else if (parameter.get_name() == "trigger_polarity")
         {
@@ -1077,51 +1029,48 @@ rcl_interfaces::msg::SetParametersResult Camera1394Node::param_change_callback(
                 result.reason = "Value: " + parameter.as_string() + " is not valid for parameter: " + parameter.get_name();
                 result.successful = false;
             }
-            return result;
         }
         else if (parameter.get_name() == "auto_trigger")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_trigger, result);
-            return result;
         }
         else if (parameter.get_name() == "trigger")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.trigger, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_white_balance")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_white_balance, result);
-            return result;
         }
         else if (parameter.get_name() == "white_balance_BU")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.white_balance_BU, result);
-            return result;
         }
         else if (parameter.get_name() == "white_balance_RV")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.white_balance_RV, result);
-            return result;
         }
         else if (parameter.get_name() == "auto_zoom")
         {
             change_parameter(parameter, rclcpp::PARAMETER_INTEGER, config_.auto_zoom, result);
-            return result;
         }
         else if (parameter.get_name() == "zoom")
         {
             change_parameter(parameter, rclcpp::PARAMETER_DOUBLE, config_.zoom, result);
-            return result;
         }
         else
         {
             RCLCPP_WARN_STREAM(get_logger(), "Parameter with name: " << parameter.get_name() << " is not available.");
             result.reason = parameter.get_name() + " is not available as parameter.";
             result.successful = false;
-            return result;
         }
     }
+
+    if (result.successful)
+    {
+        driver_.reconfig(config_, 0);
+    }
+
     return result;
 }
 
