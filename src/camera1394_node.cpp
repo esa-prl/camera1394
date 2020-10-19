@@ -7,11 +7,17 @@ Camera1394Node::Camera1394Node()
 
     initialize_parameters();
 
+    future_ = exit_signal_.get_future();
+
+    poll_thread_ = std::thread(&Camera1394Node::pollThread, this);
+
     RCLCPP_INFO(this->get_logger(), "%s initialized", this->get_name());
 }
 
 Camera1394Node::~Camera1394Node()
 {
+    exit_signal_.set_value();
+    poll_thread_.join();
 }
 
 /** Helper function to declare and get parameters
@@ -1101,6 +1107,16 @@ void Camera1394Node::change_parameter(
     result.successful = true;
     result.reason = param_changed.get_name() + " correctly set.";
     return;
+}
+
+void Camera1394Node::pollThread()
+{
+    std::future_status status;
+
+    do {
+        driver_.poll();
+        status = future_.wait_for(std::chrono::seconds(0));
+    } while (status == std::future_status::timeout);
 }
 
 int main(int argc, char *argv[])

@@ -4,6 +4,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <string>
+#include <thread>
+#include <future>
+
 #include "camera1394/camera1394_config.hpp"
 #include "camera1394/driver1394.hpp"
 
@@ -36,5 +39,15 @@ protected:
 private:
     camera1394::Camera1394Config config_;
     camera1394_driver::Camera1394Driver driver_;
+
+
+
+    // We use this future/promise pair to notify threads that we are shutting down
+    std::shared_future<void> future_;
+    std::promise<void> exit_signal_;
+
+    void pollThread();
+    std::thread poll_thread_;
+
 };
 #endif
