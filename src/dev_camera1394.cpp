@@ -264,6 +264,7 @@ int Camera1394::open(camera1394::Camera1394Config &newconfig)
                                                         << list->ids[i].guid);
 
       device_id_ = std::string(temp);
+      newconfig.guid = std::string(temp);
       break;
     }
   }
