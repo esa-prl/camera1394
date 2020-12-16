@@ -71,6 +71,10 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+install(DIRECTORY
+  config
+  DESTINATION share/${PROJECT_NAME}
+)
 rosidl_target_interfaces(camera1394_node
   ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
